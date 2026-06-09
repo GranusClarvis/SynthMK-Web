@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SynthMK — synthetic monitoring for Checkmk, recorded in your browser</title>
+  <meta name="description" content="Open-source synthetic monitoring for Checkmk Raw: record browser journeys with a Chrome extension, run them on a self-hosted Playwright node, alert in Checkmk. Free alternative to Robotmk." />
+  <link rel="icon" href="assets/favicon.png" />
+  <link rel="stylesheet" href="css/site.css" />
+  <meta property="og:title" content="SynthMK — synthetic monitoring for Checkmk" />
+  <meta property="og:description" content="Record a browser journey. Run it on your network. Alert in Checkmk. No Robot Framework, no enterprise license, no cloud." />
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-inner">
+    <a class="brand" href="#"><img src="assets/logo.png" alt="" /><span>Synth<b>MK</b></span></a>
+    <div class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#features">Features</a>
+      <a href="#compare">vs Robotmk</a>
+      <a href="#quickstart">Quickstart</a>
+      <a href="docs/">Docs</a>
+      <a href="https://github.com/GranusClarvis/SynthMK">GitHub</a>
+      <a class="nav-cta" href="#download">Download</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="kicker">Open source · Works on Checkmk Raw (free)</span>
+    <h1>Is your login flow still working?<br /><em>Ask Checkmk.</em></h1>
+    <p class="sub">
+      SynthMK turns real browser journeys into native Checkmk services.
+      Record once in your browser, run on a self-hosted Playwright node inside
+      your network, and let Checkmk do what it does best — alert, graph, report.
+      No Robot Framework. No enterprise license. No cloud.
+    </p>
+    <div class="cta-row">
+      <a class="btn primary" href="#quickstart">Get started in 5 minutes</a>
+      <a class="btn" href="https://github.com/GranusClarvis/SynthMK">★ Star on GitHub</a>
+    </div>
+    <p class="hero-note">MIT-licensed · verified against Checkmk Raw 2.3 · one container, one MKP, one extension</p>
+    <div class="hero-shot">
+      <img class="shot" src="assets/cmk-graphs.png" alt="Checkmk graphing a SynthMK synthetic journey with per-step metrics" />
+    </div>
+  </div>
+</header>
+
+<section id="how" class="alt">
+  <div class="wrap">
+    <h2>Record → Run → Alert</h2>
+    <p class="lead">Three pieces, each doing one job. Your monitored apps never know the difference between SynthMK and a real user.</p>
+    <div class="steps3">
+      <div class="step-card">
+        <div class="n">1</div>
+        <h3>Record in your browser</h3>
+        <p>Click through the journey like a user. The extension captures clicks, typing, dropdowns and Enter presses into readable YAML — and records password fields as <code>{{ secret.* }}</code> references, never the value.</p>
+        <img src="assets/recorder-popup.png" alt="SynthMK Recorder extension popup with a live step list" />
+      </div>
+      <div class="step-card">
+        <div class="n">2</div>
+        <h3>Run on your network</h3>
+        <p>One hardened Docker appliance inside your intranet runs every flow on its own schedule with a real Chromium — and manages them from a built-in dashboard with one-click run-now and a linting flow editor.</p>
+        <img src="assets/node-dashboard.png" alt="SynthMK runner node management dashboard" />
+      </div>
+      <div class="step-card">
+        <div class="n">3</div>
+        <h3>Alert in Checkmk</h3>
+        <p>A native check plugin renders every journey as a real service: state, journey duration with thresholds, per-step metrics, failure screenshots — and settings editable right in Checkmk's Setup GUI.</p>
+        <img src="assets/cmk-services.png" alt="SynthMK synthetic services inside Checkmk" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="wrap">
+    <h2>Enterprise-grade, home-lab simple</h2>
+    <p class="lead">Every feature below ships verified — the test evidence is public in the repo.</p>
+    <div class="grid">
+      <div class="feat"><div class="ico">🎬</div><h3>Browser recorder</h3><p>Chrome, Edge and Firefox extension with a live editable step list, assertions, thresholds and one-click YAML export.</p></div>
+      <div class="feat"><div class="ico">🔐</div><h3>Secrets done right</h3><p>Credentials live in a chmod-600 file on your node. Flows reference them by name; values are redacted from every output and masked in screenshots.</p></div>
+      <div class="feat"><div class="ico">📊</div><h3>Native Checkmk plugin</h3><p>Real check plugin with discovery, unit-aware duration graphs with threshold bands, perf-o-meters and per-step metrics.</p></div>
+      <div class="feat"><div class="ico">⚙️</div><h3>Settings in Setup</h3><p>Override journey thresholds per service from Checkmk's GUI — a proper ruleset, no flow-file edits, no node access needed.</p></div>
+      <div class="feat"><div class="ico">🚀</div><h3>Scales to 100 checks</h3><p>Worker-pool scheduler with stagger, overlap suppression and hard timeouts. Measured: 60 flows, 37 runs/min, zero overdue on one default node.</p></div>
+      <div class="feat"><div class="ico">🛡️</div><h3>Hardened node</h3><p>Non-root browsers, token-authenticated screenshots, resource limits, and an optional one-command TLS agent registration.</p></div>
+      <div class="feat"><div class="ico">📷</div><h3>Failure screenshots</h3><p>Every failed step captures the page exactly as the check saw it, served with per-file HMAC tokens and linked from the service.</p></div>
+      <div class="feat"><div class="ico">🖥️</div><h3>Node dashboard</h3><p>Manage checks in the browser: live states, per-step timings, run-now, and a flow editor that lints before it saves.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="compare" class="alt">
+  <div class="wrap">
+    <h2>The Robotmk alternative for the rest of us</h2>
+    <p class="lead">Checkmk's official synthetic monitoring (Robotmk) is powerful — and enterprise-only, Robot-Framework-based, and heavyweight. SynthMK targets the gap underneath it.</p>
+    <table class="cmp">
+      <thead><tr><th></th><th>Checkmk Synthetic Monitoring (Robotmk)</th><th>SynthMK</th></tr></thead>
+      <tbody>
+        <tr><td>Checkmk edition</td><td class="no">Commercial editions, extra subscription</td><td class="yes">Raw / CRE — free, MIT-licensed</td></tr>
+        <tr><td>Engine</td><td class="no">Robot Framework keyword DSL</td><td class="yes">Playwright, readable YAML</td></tr>
+        <tr><td>Authoring</td><td class="no">Write .robot suites by hand</td><td class="yes">Record in the browser, export YAML</td></tr>
+        <tr><td>Environment management</td><td class="no">RCC env builds on each test host</td><td class="yes">One pre-baked container — nothing to build</td></tr>
+        <tr><td>Credentials</td><td class="no">Secret env vars, plaintext in agent config</td><td class="yes">0600 secrets file, output-redacted, screenshot-masked</td></tr>
+        <tr><td>Per-step visibility</td><td class="yes">Keyword services (rich)</td><td class="yes">Per-step metrics + breakdown on every service</td></tr>
+        <tr><td>Check management</td><td class="no">Bakery rules + .robot redeploys</td><td class="yes">Web dashboard with linting editor + run-now</td></tr>
+        <tr><td>Footprint</td><td class="no">A platform</td><td class="yes">One container + one MKP + one extension</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="quickstart">
+  <div class="wrap">
+    <h2>Up and running in five minutes</h2>
+    <p class="lead">One container on your network, one MKP on your Checkmk site, one host entry. That's the whole install.</p>
+    <div class="qs">
+      <div class="term">
+        <button class="copy" data-copy="qs">copy</button>
+        <pre id="qs"><span class="c"># 1 — the runner node (any Docker host inside your network)</span>
+git clone https://github.com/GranusClarvis/SynthMK.git &amp;&amp; cd SynthMK
+docker build -f runner-node/Dockerfile -t synthmk-runner .
+docker run -d --name synthmk-runner \
+  -p 6556:6556 -p 9180:9180 -p 9181:9181 \
+  -v "$PWD/flows:/opt/synthmk/flows" \
+  -e SYNTHMK_SHOT_BASE_URL="http://&lt;node-lan-ip&gt;:9180" \
+  synthmk-runner
+
+<span class="c"># 2 — the Checkmk plugin (on your site)</span>
+mkp add synthmk-*.mkp &amp;&amp; mkp enable synthmk
+
+<span class="c"># 3 — add the node as a host in Checkmk, run service discovery.</span>
+<span class="t"># Every flow appears as a service — graphs, thresholds, alerts included.</span></pre>
+      </div>
+      <div class="qs-text">
+        <h3>Then record your first real check</h3>
+        <ol>
+          <li>Install the <a href="#download">browser extension</a> and click <b>● Start</b> on your app's login page.</li>
+          <li>Do the journey once — type, click, press Enter. Password fields are recorded as secret references automatically.</li>
+          <li>Add a “Visible text” assertion, set thresholds, <b>Download .yaml</b>.</li>
+          <li>Paste it into the node dashboard at <code>http://&lt;node&gt;:9181</code> — it lints before saving, and the check is live on the next interval.</li>
+        </ol>
+        <p><a href="docs/">Full documentation →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <h2>See it in Checkmk</h2>
+    <p class="lead">Real screenshots from the test lab that every release is verified against.</p>
+    <div class="gallery">
+      <figure><img src="assets/cmk-graphs.png" alt="Journey duration graph" /><figcaption>Journey duration with threshold bands + a graph per step — where exactly is the time going?</figcaption></figure>
+      <figure><img src="assets/cmk-service-detail.png" alt="Service detail" /><figcaption>Native service detail: summary, per-step breakdown, perf-o-meter, screenshot link.</figcaption></figure>
+      <figure><img src="assets/node-dashboard.png" alt="Node dashboard" /><figcaption>The node's own management dashboard — states, step timings, run-now, flow editor.</figcaption></figure>
+      <figure><img src="assets/recorder-popup.png" alt="Recorder" /><figcaption>The recorder: live step list, assertions, thresholds, YAML export. Passwords never recorded.</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section id="download">
+  <div class="wrap">
+    <h2>Download</h2>
+    <p class="lead">Everything ships from <a href="https://github.com/GranusClarvis/SynthMK/releases">GitHub Releases</a>. Current release: <b>v0.4.0</b>.</p>
+    <div class="dl">
+      <div class="dl-card">
+        <h3>📦 Checkmk plugin (MKP)</h3>
+        <p>The native check plugin, ruleset, graphs and runner payload. Install on your site via <code>mkp add</code> or Setup → Extension packages.</p>
+        <a class="btn primary" href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk.mkp">Download .mkp</a>
+        <div class="dl-meta">Checkmk Raw/CEE 2.3+</div>
+      </div>
+      <div class="dl-card">
+        <h3>🧩 Browser extension</h3>
+        <p>The recorder for Chrome and Edge (one package) or Firefox. Load via your browser's developer mode — store listings are on the roadmap.</p>
+        <a class="btn primary" href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk-recorder-chrome.zip">Chrome / Edge .zip</a>
+        <div class="dl-meta"><a href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk-recorder-firefox.zip">Firefox build</a> · MV3</div>
+      </div>
+      <div class="dl-card">
+        <h3>🐳 Runner node</h3>
+        <p>The appliance builds from the repo in one command (pinned Playwright + browsers included). Hardened compose template in <code>runner-node/</code>.</p>
+        <a class="btn primary" href="https://github.com/GranusClarvis/SynthMK">Get the source</a>
+        <div class="dl-meta">docker build · ~2 GB image, browsers included</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <h2>Security is the product</h2>
+    <p class="lead">Synthetic checks hold your credentials and watch your internal apps — SynthMK treats both accordingly. <a href="https://github.com/GranusClarvis/SynthMK/blob/main/docs/STATUS.md">Read the full security review →</a></p>
+    <div class="sec-strip">
+      <div class="sec-item"><b>Secrets never leave the node</b> chmod-600 secrets file, refused if readable by others; values redacted from all output and masked in screenshots.</div>
+      <div class="sec-item"><b>Recorder never sees passwords</b> typing into a password field records a reference — the value stays on the page.</div>
+      <div class="sec-item"><b>Authenticated artifacts</b> screenshots served with per-file HMAC tokens; dashboard behind token sign-in with CSRF protection.</div>
+      <div class="sec-item"><b>TLS to Checkmk</b> one command registers the official agent controller — encrypted, certificate-pinned transport.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <a class="brand" href="#"><img src="assets/logo.png" alt="" /><span>Synth<b>MK</b></span></a>
+    <div>
+      <a href="docs/">Docs</a> ·
+      <a href="https://github.com/GranusClarvis/SynthMK">GitHub</a> ·
+      <a href="https://github.com/GranusClarvis/SynthMK/releases">Releases</a> ·
+      <a href="https://github.com/GranusClarvis/SynthMK/blob/main/CHANGELOG.md">Changelog</a>
+    </div>
+    <div>MIT licensed. Not affiliated with Checkmk GmbH.</div>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('.copy').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var pre = document.getElementById(btn.dataset.copy);
+    navigator.clipboard.writeText(pre.innerText).then(function () {
+      btn.textContent = 'copied ✓';
+      setTimeout(function () { btn.textContent = 'copy'; }, 1500);
+    });
+  });
+});
+</script>
+</body>
+</html>
