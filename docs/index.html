@@ -170,27 +170,31 @@ vpn_totp: "JBSWY3DPEHPK3PXP"   # base32 TOTP seed</code></pre>
     <h2 id="subflows">Reusable sub-flows</h2>
     <p>Repeated step sequences — almost always the login — can be defined once and
     included from any flow:</p>
-    <!-- TODO(v0.5 syntax): confirm the final include key (`use:`) and the sub-flow directory convention against the shipped v0.5 schema before publish. -->
-    <pre><code># flows/subflows/login.yaml — steps only, no name/thresholds
-- action: open_url
-  url: "https://portal.example.lan/login"
-- action: fill
-  selector: "#username"
-  value: "{{ secret.portal_user }}"
-- action: fill
-  selector: "#password"
-  value: "{{ secret.portal_password }}"
-  sensitive: true
-- action: press
-  key: "Enter"
+    <pre><code># flows/shared/login.yaml — a fragment: only its steps are used
+name: shared portal login (fragment)
+steps:
+  - action: open_url
+    url: "https://portal.example.lan/login"
+  - action: fill
+    selector: "#username"
+    value: "{{ secret.portal_user }}"
+    sensitive: true
+  - action: fill
+    selector: "#password"
+    value: "{{ secret.portal_password }}"
+    sensitive: true
+  - action: press
+    key: "Enter"
 
 # any flow that needs a logged-in session:
 steps:
-  - use: subflows/login.yaml
+  - action: include
+    flow: shared/login.yaml
   - action: check_visible_text
     text: "Dashboard"</code></pre>
-    <p>Sub-flow steps are inlined at lint time, so per-step timings still show each
-    real step, and a broken login shows the failing step's own name.</p>
+    <p>Sub-flow steps are inlined when the flow loads (cycle-safe, max 3 levels),
+    so per-step timings still show each real step, and a broken login shows the
+    failing step's own name. The linter follows includes and lints the target.</p>
 
     <h2 id="script-checks">Playwright script checks (trust-gated)</h2>
     <p>For journeys that genuinely need code, the node can run Playwright Python
@@ -200,13 +204,17 @@ steps:
     monitoring probe is remote code execution; SynthMK treats enabling it as an
     explicit operational decision:</p>
     <ul>
-      <li>The operator mounts a scripts directory into the container and enables it via the node's environment configuration. Without that, no script ever executes.</li>
-      <li>Scripts cannot be created or edited from the dashboard — they arrive via the mounted directory only, so your existing code-review path applies.</li>
+      <li>The node must set <code>SYNTHMK_ALLOW_SCRIPTS=1</code> in its environment. Without it, every <code>type: script</code> flow reports UNKNOWN and no script ever executes.</li>
+      <li>Scripts cannot be created or edited from the dashboard — they arrive via the mounted flows directory only, so your existing code-review path applies.</li>
       <li>Script runs are bounded by the same hard timeout and worker pool as YAML flows, and appear in the audit log like any other check activity.</li>
     </ul>
-    <!-- TODO(v0.5 syntax): document the exact env var / directory name for enabling script checks once v0.5 ships (placeholder: see runner-node/README.md in the repo). -->
-    <p>See <a href="https://github.com/GranusClarvis/SynthMK/tree/main/runner-node">runner-node/README.md</a>
-    for the enablement reference and the script contract.</p>
+    <p>The flow file says <code>type: script</code> and <code>script: scripts/x.py</code>
+    (relative path); the script defines <code>run(page, api)</code> — <code>page</code> is
+    the raw Playwright page, <code>api</code> adds <code>api.step("label")</code> timings,
+    <code>api.secret()</code> / <code>api.totp()</code> (auto-redacted), <code>api.screenshot()</code>
+    and <code>api.fail()</code>. See
+    <a href="https://github.com/GranusClarvis/SynthMK/blob/main/flows/scripts/example_journey.py">flows/scripts/example_journey.py</a>
+    for the full contract.</p>
 
     <h2 id="dashboard">The node dashboard</h2>
     <p><code>http://&lt;node&gt;:9181</code> — sign in with the admin token
@@ -285,11 +293,10 @@ steps:
       <tr><td><code>check_text_absent</code></td><td>text</td><td>Assert text is <em>not</em> on screen (error banners)</td></tr>
       <tr><td><code>check_title</code> / <code>check_url</code></td><td>contains</td><td>Assert title / URL</td></tr>
       <tr><td><code>check_element_count</code></td><td>selector, min?</td><td>Assert ≥ N matching elements</td></tr>
-      <tr><td><code>check_attribute</code></td><td>selector, attribute, equals</td><td>Assert an element attribute's value</td></tr>
-      <tr><td><code>check_checked</code></td><td>selector, checked?</td><td>Assert a checkbox/radio state</td></tr>
-      <tr><td><code>use</code></td><td>path</td><td>Inline a reusable <a href="#subflows">sub-flow</a></td></tr>
+      <tr><td><code>check_element_attribute</code></td><td>selector, attribute, equals?/contains?</td><td>Assert an element attribute (present / equals / contains)</td></tr>
+      <tr><td><code>check_checkbox</code></td><td>selector, checked?</td><td>Assert a checkbox/radio state</td></tr>
+      <tr><td><code>include</code></td><td>flow</td><td>Inline a reusable <a href="#subflows">sub-flow</a></td></tr>
     </table>
-    <!-- TODO(v0.5 syntax): verify the final action names for check_text_absent / check_attribute / check_checked against the shipped v0.5 linter table before publish. -->
     <p>Every <code>selector</code> field also accepts a <b>list of selectors</b>, tried in
     order — the fallback array that keeps checks alive across frontend refactors.
     Any step accepts <code>optional: true</code> (best-effort, e.g. cookie-consent clicks)

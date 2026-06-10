@@ -104,11 +104,10 @@ steps:
           <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span><b>Tune</b> — name the check, set its interval and warn/crit thresholds, and save. The builder writes the same lint-checked YAML as every other path.</span></li>
         </ul>
         <p>Because the builder selects elements from the live page, it generates selector fallback arrays the same way the importer does — and because it runs on the node, the flow is scheduled the moment you save it.</p>
-        <!-- TODO(v0.5 screenshot): replace node-editor.png with a real step-builder capture once the v0.5 lab screenshots are taken. -->
       </div>
       <figure class="shot-frame">
-        <img src="assets/node-editor.png" alt="SynthMK node dashboard flow editor with YAML linting before save" width="1500" height="955" loading="lazy" />
-        <figcaption>The dashboard's flow editor — the step builder and the YAML view edit the same flow, and the linter gates every save.</figcaption>
+        <img src="assets/step-builder.png" alt="SynthMK visual step builder: element picked on a live page preview, selector ladder and action panel, tested step list" width="1500" height="1000" loading="lazy" />
+        <figcaption>The step builder live: a <code>&lt;select&gt;</code> picked on the page preview, its verified selector ladder, and three already-tested steps.</figcaption>
       </figure>
     </div>
 
@@ -122,7 +121,6 @@ steps:
         <p><b>Reusable sub-flows</b> keep journeys DRY: define the login sequence once, include it from every flow that needs it, and a login-page change becomes a one-file fix.</p>
         <p class="prose"><a href="docs/index.html#schema">Full flow reference in the docs →</a></p>
       </div>
-      <!-- TODO(v0.5 syntax): confirm final sub-flow include syntax (`use:`) and selector-array key against the shipped v0.5 schema before publish. -->
       <div class="term" aria-label="Flow YAML example">
         <pre><span class="c"># flows/checkout.yaml — a complete production check</span>
 name: "Synthetic Shop Checkout"
@@ -131,7 +129,8 @@ crit_ms: 12000
 screenshot_on_failure: true
 checkmk_host: shop-frontend     <span class="c"># attribute to the app's host</span>
 steps:
-  - use: subflows/login.yaml    <span class="c"># shared login sub-flow</span>
+  - action: include             <span class="c"># shared login sub-flow</span>
+    flow: shared/login.yaml
   - action: click
     selector:
       - "[data-test=add-to-cart]"
@@ -154,20 +153,20 @@ steps:
         <p>Some checks genuinely need code — multi-tab dances, conditional paths, API setup before the browser opens. For those, SynthMK runs full <b>Playwright Python scripts as checks</b>: same scheduler, same service output contract, same screenshots and redaction.</p>
         <p>Running operator-supplied code on a monitoring probe is remote code execution by design, so this path is <b>disabled by default</b>. The operator must explicitly enable a trusted scripts directory on the node before any script check executes — authors cannot turn it on from the dashboard. <a href="enterprise.html#script-trust">How the trust gate works →</a></p>
       </div>
-      <!-- TODO(v0.5 syntax): confirm the script-check API surface (decorator vs plain function contract) against the shipped v0.5 implementation before publish. -->
       <div class="term" aria-label="Script check example">
-        <pre><span class="c"># scripts/multi_tab_journey.py — runs as a normal check</span>
-from synthmk import check
+        <pre><span class="c"># flows/scripts/handover.py — runs as a normal check</span>
+<span class="c"># (flows/handover.yaml: type: script, script: scripts/handover.py)</span>
 
-@check(name="Synthetic Handover Journey",
-       warn_ms=8000, crit_ms=20000)
-def run(page, secrets):
+def run(page, api):
     page.goto("https://portal.example.lan")
-    page.fill("#user", secrets["portal_user"])
-    page.fill("#pw", secrets["portal_password"])
-    page.click("text=Sign in")
-    with page.expect_popup() as tab:
-        page.click("text=Open report")
+    with api.step("login"):          <span class="c"># named, graphed in Checkmk</span>
+        page.fill("#user", api.secret("portal_user"))
+        page.fill("#pw", api.secret("portal_password"))
+        page.click("text=Sign in")
+    with api.step("report"):
+        with page.expect_popup() as tab:
+            page.click("text=Open report")
+        assert "Report" in tab.value.title()
     assert "Quarterly" in tab.value.title()</pre>
       </div>
     </div>
