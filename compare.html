@@ -31,7 +31,7 @@
 <section class="page-hero">
   <div class="wrap">
     <p class="eyebrow">Comparisons</p>
-    <h1>Where SynthMK fits — and where it doesn't</h1>
+    <h1>Where SynthMK fits, and where it doesn't</h1>
     <p class="lead prose">Written by the SynthMK project, last reviewed June 2026. Vendors change their products and pricing; every section links the primary source so you can verify the current state yourself. Where a competitor is the better fit, this page says so.</p>
   </div>
 </section>
@@ -41,7 +41,7 @@
     <div class="section-head left">
       <p class="eyebrow">The main event</p>
       <h2 style="text-align:left;">vs Checkmk Synthetic Monitoring (Robotmk)</h2>
-      <p class="lead prose" style="margin-left:0; text-align:left;">Checkmk's official synthetic monitoring is <a href="https://checkmk.com/product/synthetic-monitoring">a commercial add-on</a> built on <a href="https://robotframework.org/">Robot Framework</a> via <a href="https://docs.checkmk.com/latest/en/synthetic_monitoring.html">Robotmk</a>. It is a serious, supported product — and it is aimed at organizations a tier above the teams SynthMK serves. The differences below are structural, not cosmetic.</p>
+      <p class="lead prose" style="margin-left:0; text-align:left;">Checkmk's official synthetic monitoring is <a href="https://checkmk.com/product/synthetic-monitoring">a commercial add-on</a> built on <a href="https://robotframework.org/">Robot Framework</a> via <a href="https://docs.checkmk.com/latest/en/synthetic_monitoring.html">Robotmk</a>. It is a serious, supported product, aimed at organizations a tier above the teams SynthMK serves. The differences below are structural, not cosmetic.</p>
     </div>
 
     <div class="table-scroll">
@@ -50,13 +50,13 @@
         <tbody>
           <tr>
             <td>Licensing</td>
-            <td class="no">Requires a commercial Checkmk edition, plus a separate synthetic-monitoring subscription licensed per test — see <a href="https://checkmk.com/product/synthetic-monitoring">checkmk.com</a> for current terms</td>
-            <td class="yes">MIT license. Runs on Checkmk Raw (free) and commercial editions alike. No per-test, per-run or per-seat fees — it is open source</td>
+            <td class="no">Requires a commercial Checkmk edition, plus a separate synthetic-monitoring subscription licensed per test; see <a href="https://checkmk.com/product/synthetic-monitoring">checkmk.com</a> for current terms</td>
+            <td class="yes">MIT license. Runs on Checkmk Raw (free) and commercial editions alike. No per-test, per-run or per-seat fees; it is open source</td>
           </tr>
           <tr>
             <td>Authoring model</td>
             <td class="no">Robot Framework keyword suites (<code>.robot</code> files) written by hand; typically a test-automation skillset</td>
-            <td class="yes">Record in the browser, import a Chrome DevTools recording, click together in the visual builder, or write YAML — Playwright Python for the cases that need code</td>
+            <td class="yes">Record in the browser, import a Chrome DevTools recording, click together in the visual builder, or write YAML, with Playwright Python for the cases that need code</td>
           </tr>
           <tr>
             <td>Probe environment</td>
@@ -71,7 +71,7 @@
           <tr>
             <td>Per-step visibility</td>
             <td class="yes">Rich: keywords can surface as their own services with their own thresholds</td>
-            <td class="yes">Per-step metrics, graphs and a step breakdown on every service — one service per journey, steps as metrics</td>
+            <td class="yes">Per-step metrics, graphs and a step breakdown on every service: one service per journey, steps as metrics</td>
           </tr>
           <tr>
             <td>Failure artifacts</td>
@@ -81,7 +81,7 @@
           <tr>
             <td>Check management</td>
             <td class="no">Agent Bakery rules; suite changes are file deployments</td>
-            <td class="yes">Node dashboard: lint-gated editor, run-now, pause/resume, tags, version history with rollback, audit log — plus Setup-ruleset thresholds in Checkmk itself</td>
+            <td class="yes">Node dashboard: lint-gated editor, run-now, pause/resume, tags, version history with rollback, audit log, plus Setup-ruleset thresholds in Checkmk itself</td>
           </tr>
           <tr>
             <td>Footprint</td>
@@ -116,19 +116,19 @@
     <div class="grid-2">
       <div class="card prose">
         <h3>Datadog Synthetic Monitoring</h3>
-        <p>A polished SaaS with browser tests, global locations and deep APM correlation — <a href="https://www.datadoghq.com/pricing/">priced per test run</a>, with results living in Datadog's cloud. If your monitoring estate is Datadog, use it. If your estate is Checkmk and your apps are internal, SynthMK keeps journeys, credentials and screenshots inside your network, alerts through the Checkmk pipeline you already operate, and costs nothing per run.</p>
+        <p>A polished SaaS with browser tests, global locations and deep APM correlation, <a href="https://www.datadoghq.com/pricing/">priced per test run</a>, with results living in Datadog's cloud. If your monitoring estate is Datadog, use it. If your estate is Checkmk and your apps are internal, SynthMK keeps journeys, credentials and screenshots inside your network, alerts through the Checkmk pipeline you already operate, and costs nothing per run.</p>
       </div>
       <div class="card prose">
         <h3>Checkly</h3>
-        <p><a href="https://www.checklyhq.com/">Checkly</a> defines the state of the art for Playwright-as-code monitoring — monitoring-as-code workflows, excellent developer experience, SaaS control plane with usage-based pricing. SynthMK borrows its best idea (Playwright underneath, code as the escape hatch) but inverts the control plane: Checkmk is the scheduler-of-record and UI, everything runs on your hardware, and the default authoring path needs no code at all.</p>
+        <p><a href="https://www.checklyhq.com/">Checkly</a> defines the state of the art for Playwright-as-code monitoring: monitoring-as-code workflows, a strong developer experience, and a SaaS control plane with usage-based pricing. SynthMK borrows its best idea (Playwright underneath, code as the escape hatch) but inverts the control plane: Checkmk is the scheduler-of-record and UI, everything runs on your hardware, and the default authoring path needs no code at all.</p>
       </div>
       <div class="card prose">
         <h3>Grafana Synthetic Monitoring</h3>
-        <p><a href="https://grafana.com/products/cloud/synthetic-monitoring/">Grafana's offering</a> (k6-based) is a Grafana Cloud feature: convenient if you live in that ecosystem, but the control plane is theirs and usage is metered. SynthMK is the equivalent capability for Checkmk shops — native services and graphs in the tool your NOC already watches, fully self-hosted.</p>
+        <p><a href="https://grafana.com/products/cloud/synthetic-monitoring/">Grafana's offering</a> (k6-based) is a Grafana Cloud feature: convenient if you live in that ecosystem, but the control plane is theirs and usage is metered. SynthMK is the equivalent capability for Checkmk shops: native services and graphs in the tool your NOC already watches, fully self-hosted.</p>
       </div>
       <div class="card prose">
         <h3>Uptime Kuma</h3>
-        <p><a href="https://github.com/louislam/uptime-kuma">Uptime Kuma</a> proves the demand for simple self-hosted monitoring — it is excellent at "is it up?" pings and status pages. It does not do multi-step browser journeys (log in, add to cart, assert the result), and it brings its own alerting stack. SynthMK starts where Kuma stops: real user journeys, reported into Checkmk's alerting, graphing and escalation instead of a parallel system.</p>
+        <p><a href="https://github.com/louislam/uptime-kuma">Uptime Kuma</a> proves the demand for simple self-hosted monitoring. It is excellent at "is it up?" pings and status pages. It does not do multi-step browser journeys (log in, add to cart, assert the result), and it brings its own alerting stack. SynthMK starts where Kuma stops: real user journeys, reported into Checkmk's alerting, graphing and escalation instead of a parallel system.</p>
       </div>
     </div>
 
@@ -168,8 +168,8 @@
       <div>
         <h4>Download</h4>
         <a href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk.mkp">Checkmk plugin (.mkp)</a>
-        <a href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk-recorder-chrome.zip">Recorder — Chrome/Edge</a>
-        <a href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk-recorder-firefox.zip">Recorder — Firefox</a>
+        <a href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk-recorder-chrome.zip">Recorder (Chrome/Edge)</a>
+        <a href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk-recorder-firefox.zip">Recorder (Firefox)</a>
       </div>
     </div>
     <div class="foot-base">

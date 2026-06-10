@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Documentation — install, author, operate · SynthMK</title>
+  <title>Documentation: install, author, operate · SynthMK</title>
   <meta name="description" content="SynthMK documentation: install the runner node and Checkmk plugin, author checks by recording, importing, building visually or writing YAML, manage secrets, scale and secure the node." />
   <link rel="icon" href="../assets/favicon.png" />
   <link rel="stylesheet" href="../css/site.css" />
@@ -58,8 +58,8 @@
 
   <main class="doc-body prose">
     <h2 id="install-node">Install the runner node</h2>
-    <p>The runner node is one Docker container you host <b>inside your network</b> —
-    it needs to reach the apps you monitor; the Checkmk server only needs to reach
+    <p>The runner node is one Docker container you host <b>inside your network</b>.
+    It needs to reach the apps you monitor; the Checkmk server only needs to reach
     the node. Browsers ship pre-installed in the image.</p>
     <pre><code>git clone https://github.com/GranusClarvis/SynthMK.git && cd SynthMK
 docker build -f runner-node/Dockerfile -t synthmk-runner .
@@ -75,7 +75,7 @@ docker run -d --name synthmk-runner --restart unless-stopped \
   synthmk-runner</code></pre>
     <div class="callout">
       <b>Set <code>SYNTHMK_SHOT_BASE_URL</code> to an address other machines can reach</b>
-      (the node's LAN IP or DNS name) — that is the URL screenshot links in Checkmk
+      (the node's LAN IP or DNS name). That is the URL screenshot links in Checkmk
       will point at. <code>localhost</code> only works on the node itself.
     </div>
     <p>Port contract: <code>6556</code> agent transport (firewall: Checkmk server only) ·
@@ -85,21 +85,21 @@ docker run -d --name synthmk-runner --restart unless-stopped \
 
     <h2 id="install-mkp">Install the Checkmk plugin</h2>
     <p>Download <a href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk.mkp">synthmk.mkp</a>
-    and install it on your site — GUI (<i>Setup → Maintenance → Extension packages → Upload</i>) or CLI:</p>
+    and install it on your site, via the GUI (<i>Setup → Maintenance → Extension packages → Upload</i>) or the CLI:</p>
     <pre><code>mkp add synthmk.mkp
 mkp enable synthmk $(mkp list | awk '$1=="synthmk"{print $2}')</code></pre>
     <p>This installs the native check plugin (services + per-step metrics), the
-    Setup ruleset, and the graph definitions. Checkmk Raw 2.3+ — no commercial
+    Setup ruleset, and the graph definitions. Checkmk Raw 2.3+; no commercial
     edition required.</p>
 
     <h2 id="add-host">Add the node to Checkmk</h2>
     <ol>
-      <li><i>Setup → Hosts → Add host</i> — hostname/IP of the runner node, monitored via <i>Checkmk agent</i> (it answers on TCP 6556).</li>
+      <li><i>Setup → Hosts → Add host</i>: hostname/IP of the runner node, monitored via <i>Checkmk agent</i> (it answers on TCP 6556).</li>
       <li><i>Save &amp; run service discovery</i>. Every configured flow appears immediately (the node publishes warm-up placeholders under the real service names), plus a <b>SynthMK Scheduler</b> health service.</li>
-      <li>Activate changes. Done — synthetic services with graphs and thresholds.</li>
+      <li>Activate changes. Done: synthetic services with graphs and thresholds.</li>
     </ol>
     <p><b>Per-app attribution (piggyback):</b> give a flow a <code>checkmk_host</code> and the
-    result is attributed to that host instead — one node, every monitored app
+    result is attributed to that host instead: one node, every monitored app
     appearing as its own Checkmk host. Create those hosts with <i>No API integrations,
     no Checkmk agent</i>.</p>
 
@@ -107,14 +107,14 @@ mkp enable synthmk $(mkp list | awk '$1=="synthmk"{print $2}')</code></pre>
     <ol>
       <li>Install the <a href="../index.html#download">extension</a> (Chrome/Edge: load unpacked via developer mode; Firefox: temporary add-on).</li>
       <li>Open your app, click the SynthMK icon, press <b>Start</b>.</li>
-      <li>Do the journey once, like a user. Steps appear live in the popup — delete mis-clicks directly in the list.</li>
+      <li>Do the journey once, like a user. Steps appear live in the popup; delete mis-clicks directly in the list.</li>
       <li>Add at least one assertion (<i>Visible text</i> / <i>Title contains</i> / <i>URL contains</i>) so the flow asserts an outcome.</li>
       <li>Name the check, set WARN/CRIT thresholds, <b>Download .yaml</b>.</li>
       <li>Add it to the node: paste into the <a href="#dashboard">dashboard</a> editor (lints before saving), or drop the file in <code>flows/</code> plus one line in <code>flows.conf</code>:
       <pre><code>my-login.yaml   300   shop-frontend   # file  interval_s  [checkmk_host]</code></pre></li>
     </ol>
-    <p>Password fields are recorded as <code>{{ secret.* }}</code> references automatically —
-    the typed value never enters the extension. See <a href="#secrets">Secrets</a>.</p>
+    <p>Password fields are recorded as <code>{{ secret.* }}</code> references automatically.
+    The typed value never enters the extension. See <a href="#secrets">Secrets</a>.</p>
 
     <h2 id="devtools-import">Import from Chrome DevTools Recorder</h2>
     <p>No extension required: every Chrome ships a recorder. To author from any
@@ -123,7 +123,7 @@ mkp enable synthmk $(mkp list | awk '$1=="synthmk"{print $2}')</code></pre>
       <li>In Chrome: <i>DevTools (F12) → Recorder panel → Create a new recording</i>. Record the journey, stop.</li>
       <li>Export the recording as <b>JSON</b> (the Recorder panel's export menu).</li>
       <li>On the node dashboard, choose <b>Import recording</b> and upload the JSON. SynthMK converts the steps and selectors into a normal YAML flow and opens it in the editor.</li>
-      <li>Review, add assertions and thresholds, save — the importer output is linted like any other flow.</li>
+      <li>Review, add assertions and thresholds, save. The importer output is linted like any other flow.</li>
     </ol>
     <p>DevTools recordings include several selector candidates per step (CSS, ARIA,
     text). The importer keeps them as a <a href="#schema">selector fallback array</a>,
@@ -133,9 +133,9 @@ mkp enable synthmk $(mkp list | awk '$1=="synthmk"{print $2}')</code></pre>
     <p>The dashboard's step builder authors a check without recording or writing YAML:</p>
     <ol>
       <li>In the dashboard, choose <b>New check → Build visually</b> and enter the start URL. The node opens a live preview of the page.</li>
-      <li>Click an element in the preview, then pick the action: <b>click</b>, <b>enter text</b>, <b>enter login/password</b> (picks a name from the secrets store — the value is never shown), <b>select dropdown option</b>, or an <b>assertion</b> (text visible, text absent, element attribute, checkbox state).</li>
+      <li>Click an element in the preview, then pick the action: <b>click</b>, <b>enter text</b>, <b>enter login/password</b> (picks a name from the secrets store; the value is never shown), <b>select dropdown option</b>, or an <b>assertion</b> (text visible, text absent, element attribute, checkbox state).</li>
       <li>Repeat until the journey is complete; reorder or delete steps in the side list.</li>
-      <li>Set name, interval and thresholds, then save. The builder writes ordinary flow YAML — you can switch to the YAML view at any time, and the linter gates the save.</li>
+      <li>Set name, interval and thresholds, then save. The builder writes ordinary flow YAML. You can switch to the YAML view at any time, and the linter gates the save.</li>
     </ol>
     <p>Because the builder selects elements on the live page, it records selector
     fallback arrays the same way the DevTools importer does.</p>
@@ -148,29 +148,29 @@ mkp enable synthmk $(mkp list | awk '$1=="synthmk"{print $2}')</code></pre>
   value: "{{ secret.password }}"
   sensitive: true</code></pre>
     <p>The real value goes in a YAML secrets file <b>on the node</b>, never in the flow:</p>
-    <pre><code># secrets.yaml — chmod 600, mounted read-only into the container
+    <pre><code># secrets.yaml: chmod 600, mounted read-only into the container
 password: the-real-password
 portal_user: monitor-bot
 vpn_totp: "JBSWY3DPEHPK3PXP"   # base32 TOTP seed</code></pre>
     <p>Guarantees enforced by the runner:</p>
     <ul>
-      <li>A secrets file readable by group/world (or owned by the wrong user) is <b>refused at startup</b> — the check goes UNKNOWN with a “chmod 600” message instead of running insecurely.</li>
-      <li>A missing secret name fails UNKNOWN — the flow never runs with blank credentials.</li>
+      <li>A secrets file readable by group/world (or owned by the wrong user) is <b>refused at startup</b>; the check goes UNKNOWN with a “chmod 600” message instead of running insecurely.</li>
+      <li>A missing secret name fails UNKNOWN, so the flow never runs with blank credentials.</li>
       <li>Every resolved value is <b>redacted to <code>***</code></b> in service output, errors, logs and spool files.</li>
       <li>After a <code>sensitive</code> fill, form fields are blanked before any screenshot.</li>
     </ul>
     <p><b>TOTP / MFA:</b> <code>{{ totp.vpn_totp }}</code> generates a current RFC 6238 code
-    (6 digits, 30-second period — the standard authenticator format) from the base32
+    (6 digits, 30-second period, the standard authenticator format) from the base32
     seed stored under that name in the secrets file. Use it to monitor MFA-enforced
     logins without weakening the account.</p>
     <p>Also available: <code>{{ var.uuid }}</code>, <code>{{ var.timestamp }}</code> and
-    <code>{{ var.random }}</code> — per-run values that stay stable within a run, so you can
+    <code>{{ var.random }}</code>: per-run values that stay stable within a run, so you can
     type a unique address and assert the page echoes it back.</p>
 
     <h2 id="subflows">Reusable sub-flows</h2>
-    <p>Repeated step sequences — almost always the login — can be defined once and
+    <p>Repeated step sequences, almost always the login, can be defined once and
     included from any flow:</p>
-    <pre><code># flows/shared/login.yaml — a fragment: only its steps are used
+    <pre><code># flows/shared/login.yaml is a fragment: only its steps are used
 name: shared portal login (fragment)
 steps:
   - action: open_url
@@ -198,18 +198,18 @@ steps:
 
     <h2 id="script-checks">Playwright script checks (trust-gated)</h2>
     <p>For journeys that genuinely need code, the node can run Playwright Python
-    scripts as checks — same scheduler, same output contract, same screenshot and
+    scripts as checks: same scheduler, same output contract, same screenshot and
     redaction behavior.</p>
     <p><b>This is disabled by default, by design.</b> Operator-supplied code on a
     monitoring probe is remote code execution; SynthMK treats enabling it as an
     explicit operational decision:</p>
     <ul>
       <li>The node must set <code>SYNTHMK_ALLOW_SCRIPTS=1</code> in its environment. Without it, every <code>type: script</code> flow reports UNKNOWN and no script ever executes.</li>
-      <li>Scripts cannot be created or edited from the dashboard — they arrive via the mounted flows directory only, so your existing code-review path applies.</li>
+      <li>Scripts cannot be created or edited from the dashboard. They arrive via the mounted flows directory only, so your existing code-review path applies.</li>
       <li>Script runs are bounded by the same hard timeout and worker pool as YAML flows, and appear in the audit log like any other check activity.</li>
     </ul>
     <p>The flow file says <code>type: script</code> and <code>script: scripts/x.py</code>
-    (relative path); the script defines <code>run(page, api)</code> — <code>page</code> is
+    (relative path); the script defines <code>run(page, api)</code>: <code>page</code> is
     the raw Playwright page, <code>api</code> adds <code>api.step("label")</code> timings,
     <code>api.secret()</code> / <code>api.totp()</code> (auto-redacted), <code>api.screenshot()</code>
     and <code>api.fail()</code>. See
@@ -217,12 +217,12 @@ steps:
     for the full contract.</p>
 
     <h2 id="dashboard">The node dashboard</h2>
-    <p><code>http://&lt;node&gt;:9181</code> — sign in with the admin token
+    <p><code>http://&lt;node&gt;:9181</code>. Sign in with the admin token
     (<code>SYNTHMK_ADMIN_TOKEN</code>, or auto-generated and printed once in the container log).
     You get live states with per-step timings, <b>Run now</b>, failure screenshot links,
     the <a href="#step-builder">step builder</a>, the
     <a href="#devtools-import">recording importer</a>, and a flow editor that runs the
-    linter before every save — invalid YAML never lands on disk. Mount <code>flows/</code>
+    linter before every save, so invalid YAML never lands on disk. Mount <code>flows/</code>
     read-only for a view-only dashboard.</p>
 
     <h2 id="manage">Pause, tags, history, audit</h2>
@@ -234,7 +234,7 @@ steps:
     </ul>
 
     <h2 id="settings">Thresholds in Checkmk Setup</h2>
-    <p><i>Setup → Service monitoring rules → <b>SynthMK synthetic browser checks</b></i> —
+    <p><i>Setup → Service monitoring rules → <b>SynthMK synthetic browser checks</b></i>:
     override journey duration thresholds per service (or per host/folder/label like
     any Checkmk rule) without touching the node. The flow file's
     <code>warn_ms</code>/<code>crit_ms</code> apply when no rule matches.</p>
@@ -242,7 +242,7 @@ steps:
     <h2 id="screenshots">Failure screenshots</h2>
     <p>Flows with <code>screenshot_on_failure: true</code> capture the page at the failing
     step (an always-on <code>screenshot</code> step exists too, for evidence captures).
-    Links carry a per-file HMAC token — no listing, no traversal, 403 without the
+    Links carry a per-file HMAC token: no listing, no traversal, 403 without the
     token. To make them clickable in the Checkmk GUI, set
     <i>“Escape HTML codes in service output” = Do not escape</i>, <b>scoped to the SynthMK
     hosts only</b> (escaping-off is an XSS surface; SynthMK emits a single sanitized line).</p>
@@ -252,15 +252,15 @@ steps:
     always instant; a worker pool (<code>SYNTHMK_MAX_CONCURRENCY</code>, default 4) bounds
     concurrent browsers. Capacity rule of thumb:</p>
     <pre><code>avg_concurrency = runs_per_minute × avg_flow_seconds / 60   # keep < pool/2</code></pre>
-    <p>Measured: 60 flows at 1–3 minute intervals ≈ 37 runs/min sustained on one
+    <p>Measured: 60 flows at 1 to 3 minute intervals ≈ 37 runs/min sustained on one
     default node, zero overdue, agent poll under 0.5 s. If you oversubscribe, the
-    <b>SynthMK Scheduler</b> service WARNs on the node — monitored apps never show
+    <b>SynthMK Scheduler</b> service WARNs on the node, and monitored apps never show
     false CRITs. Method and worked examples:
     <a href="https://github.com/GranusClarvis/SynthMK/blob/main/docs/scaling.md">docs/scaling.md</a>.</p>
 
     <h2 id="tls">TLS transport (production)</h2>
     <p>The default transport is plaintext TCP 6556 (firewall it to the Checkmk
-    server). For TLS, register the official agent controller — one command:</p>
+    server). For TLS, register the official agent controller with one command:</p>
     <pre><code>docker exec -e CMK_PASSWORD=... synthmk-runner \
   bash /opt/synthmk/runner-node/register_agent.sh \
   --server cmk.example.lan:8000 --site mysite --user automation --host synthmk-runner
@@ -298,16 +298,16 @@ steps:
       <tr><td><code>include</code></td><td>flow</td><td>Inline a reusable <a href="#subflows">sub-flow</a></td></tr>
     </table>
     <p>Every <code>selector</code> field also accepts a <b>list of selectors</b>, tried in
-    order — the fallback array that keeps checks alive across frontend refactors.
+    order: the fallback array that keeps checks alive across frontend refactors.
     Any step accepts <code>optional: true</code> (best-effort, e.g. cookie-consent clicks)
     and <code>timeout_ms</code>. Full schema:
     <a href="https://github.com/GranusClarvis/SynthMK/blob/main/docs/flow-schema.md">docs/flow-schema.md</a>.</p>
 
     <h2 id="faq">FAQ</h2>
     <h3>Does it work on Checkmk Raw?</h3>
-    <p>Yes — that is the point. Raw 2.3 is the verified target. No commercial edition or add-on subscription required.</p>
+    <p>Yes, that is the point. Raw 2.3 is the verified target. No commercial edition or add-on subscription required.</p>
     <h3>Can I monitor sites behind a login?</h3>
-    <p>Yes — that is the flagship use case, including MFA accounts via <a href="#secrets">TOTP secrets</a>. The lab ships a full login → dashboard example journey.</p>
+    <p>Yes, that is the flagship use case, including MFA accounts via <a href="#secrets">TOTP secrets</a>. The lab ships a full login-to-dashboard example journey.</p>
     <h3>Can I check Google / public sites?</h3>
     <p>Public search engines bot-block headless datacenter traffic (verified: reCAPTCHA on Google, equivalent on DuckDuckGo). Wikipedia works; your own apps are the intended target.</p>
     <h3>How is this different from Robotmk?</h3>
@@ -342,8 +342,8 @@ steps:
       <div>
         <h4>Download</h4>
         <a href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk.mkp">Checkmk plugin (.mkp)</a>
-        <a href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk-recorder-chrome.zip">Recorder — Chrome/Edge</a>
-        <a href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk-recorder-firefox.zip">Recorder — Firefox</a>
+        <a href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk-recorder-chrome.zip">Recorder (Chrome/Edge)</a>
+        <a href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk-recorder-firefox.zip">Recorder (Firefox)</a>
       </div>
     </div>
     <div class="foot-base">

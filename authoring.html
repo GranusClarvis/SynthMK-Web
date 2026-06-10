@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Authoring checks — record, build visually, or write code · SynthMK</title>
+  <title>Authoring checks: record, build visually, or write code · SynthMK</title>
   <meta name="description" content="Three ways to author a SynthMK synthetic check: record in the browser (extension or Chrome DevTools Recorder import), build visually in the node dashboard, or write YAML and Playwright code." />
   <link rel="icon" href="assets/favicon.png" />
   <link rel="stylesheet" href="css/site.css" />
@@ -32,7 +32,7 @@
   <div class="wrap">
     <p class="eyebrow">Authoring</p>
     <h1>Three paths to the same readable check</h1>
-    <p class="lead">Record it, click it together, or write it. Every path produces the same artifact — a short YAML flow you can read, diff and review — so a check started by an application owner can be refined by an engineer without translation.</p>
+    <p class="lead">Record it, click it together, or write it. Every path produces the same artifact: a short YAML flow you can read, diff and review. A check started by an application owner can be refined by an engineer without translation.</p>
   </div>
 </section>
 
@@ -42,13 +42,13 @@
     <!-- ============ PATH 1: RECORD ============ -->
     <div class="split">
       <div class="prose">
-        <span class="tag">Path 1 — Record</span>
+        <span class="tag">Path 1: Record</span>
         <h3>Click through the journey once</h3>
-        <p>Install the recorder extension (Chrome, Edge or Firefox), open your application, press <b>Start</b>, and do the journey like a user. Every click, keystroke, dropdown selection and Enter press lands in a live step list you can edit on the spot — delete a mis-click, add an assertion, set warn/crit thresholds, export.</p>
+        <p>Install the recorder extension (Chrome, Edge or Firefox), open your application, press <b>Start</b>, and do the journey like a user. Every click, keystroke, dropdown selection and Enter press lands in a live step list you can edit on the spot: delete a mis-click, add an assertion, set warn/crit thresholds, export.</p>
         <ul class="checklist">
-          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg><span><b>Passwords never enter the recording.</b> Typing into a password field records <code>{{ secret.password }}</code> with a <code>sensitive</code> flag — the value stays on the page.</span></li>
-          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg><span><b>Assertions before export.</b> Add “visible text”, “title contains” or “URL contains” checks directly in the popup, so the flow asserts an outcome — not just that clicking didn't crash.</span></li>
-          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg><span><b>Exports lint-clean YAML.</b> The exported file passes the same linter the runner uses — verified by a real-browser end-to-end test on every release.</span></li>
+          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg><span><b>Passwords never enter the recording.</b> Typing into a password field records <code>{{ secret.password }}</code> with a <code>sensitive</code> flag. The value stays on the page.</span></li>
+          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg><span><b>Assertions before export.</b> Add “visible text”, “title contains” or “URL contains” checks directly in the popup, so the flow asserts an outcome, not just that clicking didn't crash.</span></li>
+          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg><span><b>Exports lint-clean YAML.</b> The exported file passes the same linter the runner uses, verified by a real-browser end-to-end test on every release.</span></li>
         </ul>
       </div>
       <figure class="shot-frame shot-portrait">
@@ -59,10 +59,10 @@
 
     <div class="split">
       <div class="prose">
-        <span class="tag">Path 1b — No extension needed</span>
+        <span class="tag">Path 1b: No extension needed</span>
         <h3>Import from Chrome DevTools Recorder</h3>
         <p>Locked-down desktops where extensions need an approval ticket? Every Chrome already ships a recorder. Open <b>DevTools → Recorder</b>, record the journey, export the recording as JSON, and import it on the node dashboard. SynthMK converts the recording's steps and selectors into the same readable YAML flow.</p>
-        <p>That makes authoring possible from any machine with Chrome — no software request, no developer mode, nothing installed.</p>
+        <p>That makes authoring possible from any machine with Chrome. No software request, no developer mode, nothing installed.</p>
         <div class="callout">
           <b>Tip:</b> DevTools recordings carry several selector candidates per step (CSS, ARIA, text). The importer keeps them as a fallback array, so imported checks start out flake-resistant.
         </div>
@@ -95,15 +95,15 @@ steps:
     <!-- ============ PATH 2: VISUAL BUILDER ============ -->
     <div class="split">
       <div class="prose">
-        <span class="tag">Path 2 — Build visually</span>
+        <span class="tag">Path 2: Build visually</span>
         <h3>Point at the page, pick the action</h3>
         <p>The node dashboard includes a no-code step builder. Open a live preview of the target page, click the element you care about, and choose what should happen there:</p>
         <ul class="checklist">
-          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3l7 17 2.6-6.8L21.5 11z"/></svg><span><b>Interact</b> — click it, enter text, fill username/password from the node's secrets store, choose a dropdown option.</span></li>
-          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg><span><b>Assert</b> — this text must be visible, this text must be absent, this attribute must have this value, this checkbox must be checked.</span></li>
-          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span><b>Tune</b> — name the check, set its interval and warn/crit thresholds, and save. The builder writes the same lint-checked YAML as every other path.</span></li>
+          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3l7 17 2.6-6.8L21.5 11z"/></svg><span><b>Interact</b>: click it, enter text, fill username/password from the node's secrets store, choose a dropdown option.</span></li>
+          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg><span><b>Assert</b>: this text must be visible, this text must be absent, this attribute must have this value, this checkbox must be checked.</span></li>
+          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span><b>Tune</b>: name the check, set its interval and warn/crit thresholds, and save. The builder writes the same lint-checked YAML as every other path.</span></li>
         </ul>
-        <p>Because the builder selects elements from the live page, it generates selector fallback arrays the same way the importer does — and because it runs on the node, the flow is scheduled the moment you save it.</p>
+        <p>Because the builder selects elements from the live page, it generates selector fallback arrays the same way the importer does. And because it runs on the node, the flow is scheduled the moment you save it.</p>
       </div>
       <figure class="shot-frame">
         <img src="assets/step-builder.png" alt="SynthMK visual step builder: element picked on a live page preview, selector ladder and action panel, tested step list" width="1500" height="1000" loading="lazy" />
@@ -114,7 +114,7 @@ steps:
     <!-- ============ PATH 3: WRITE ============ -->
     <div class="split">
       <div class="prose">
-        <span class="tag">Path 3 — Write</span>
+        <span class="tag">Path 3: Write</span>
         <h3>YAML that fits in a code review</h3>
         <p>Flows are deliberately small and declarative: a name, thresholds, and an ordered list of steps. They live in a directory you can mount from git, so checks go through the same pull-request review as the application they monitor.</p>
         <p>The step vocabulary covers real journeys without turning into a programming language: navigation, clicks, fills, key presses, dropdowns, hovers, scrolls, explicit waits (<code>wait_for_element</code>, <code>wait_for_url</code>, <code>wait_for_network_idle</code>), evidence screenshots, and the full assertion set. Steps marked <code>optional: true</code> absorb cookie-consent banners without failing the journey.</p>
@@ -122,7 +122,7 @@ steps:
         <p class="prose"><a href="docs/index.html#schema">Full flow reference in the docs →</a></p>
       </div>
       <div class="term" aria-label="Flow YAML example">
-        <pre><span class="c"># flows/checkout.yaml — a complete production check</span>
+        <pre><span class="c"># flows/checkout.yaml: a complete production check</span>
 name: "Synthetic Shop Checkout"
 warn_ms: 5000
 crit_ms: 12000
@@ -148,13 +148,13 @@ steps:
 
     <div class="split">
       <div class="prose">
-        <span class="tag">Path 3+ — The code path</span>
+        <span class="tag">Path 3+: The code path</span>
         <h3>Playwright Python, behind a trust gate</h3>
-        <p>Some checks genuinely need code — multi-tab dances, conditional paths, API setup before the browser opens. For those, SynthMK runs full <b>Playwright Python scripts as checks</b>: same scheduler, same service output contract, same screenshots and redaction.</p>
-        <p>Running operator-supplied code on a monitoring probe is remote code execution by design, so this path is <b>disabled by default</b>. The operator must explicitly enable a trusted scripts directory on the node before any script check executes — authors cannot turn it on from the dashboard. <a href="enterprise.html#script-trust">How the trust gate works →</a></p>
+        <p>Some checks genuinely need code: multi-tab dances, conditional paths, API setup before the browser opens. For those, SynthMK runs full <b>Playwright Python scripts as checks</b>: same scheduler, same service output contract, same screenshots and redaction.</p>
+        <p>Running operator-supplied code on a monitoring probe is remote code execution by design, so this path is <b>disabled by default</b>. The operator must explicitly enable a trusted scripts directory on the node before any script check executes. Authors cannot turn it on from the dashboard. <a href="enterprise.html#script-trust">How the trust gate works →</a></p>
       </div>
       <div class="term" aria-label="Script check example">
-        <pre><span class="c"># flows/scripts/handover.py — runs as a normal check</span>
+        <pre><span class="c"># flows/scripts/handover.py: runs as a normal check</span>
 <span class="c"># (flows/handover.yaml: type: script, script: scripts/handover.py)</span>
 
 def run(page, api):
@@ -180,9 +180,9 @@ def run(page, api):
         <thead><tr><th scope="col">You are…</th><th scope="col">Best path</th><th scope="col">Why</th></tr></thead>
         <tbody>
           <tr><td>An application owner who wants “is login broken?”</td><td class="yes">Record, or visual builder</td><td>No tooling beyond a browser; the result is already a reviewable file.</td></tr>
-          <tr><td>On a locked-down desktop, no extensions allowed</td><td class="yes">DevTools Recorder import</td><td>Chrome's built-in recorder + a JSON upload — nothing to install.</td></tr>
+          <tr><td>On a locked-down desktop, no extensions allowed</td><td class="yes">DevTools Recorder import</td><td>Chrome's built-in recorder plus a JSON upload, nothing to install.</td></tr>
           <tr><td>An SRE managing dozens of checks in git</td><td class="yes">YAML by hand</td><td>Diffable, templatable, sub-flows for shared logins, reviewed like code.</td></tr>
-          <tr><td>Automating something genuinely complex</td><td class="yes">Playwright script check</td><td>Full code power, same monitoring contract — once the operator enables it.</td></tr>
+          <tr><td>Automating something genuinely complex</td><td class="yes">Playwright script check</td><td>Full code power, same monitoring contract, once the operator enables it.</td></tr>
         </tbody>
       </table>
     </div>
@@ -219,8 +219,8 @@ def run(page, api):
       <div>
         <h4>Download</h4>
         <a href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk.mkp">Checkmk plugin (.mkp)</a>
-        <a href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk-recorder-chrome.zip">Recorder — Chrome/Edge</a>
-        <a href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk-recorder-firefox.zip">Recorder — Firefox</a>
+        <a href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk-recorder-chrome.zip">Recorder (Chrome/Edge)</a>
+        <a href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk-recorder-firefox.zip">Recorder (Firefox)</a>
       </div>
     </div>
     <div class="foot-base">

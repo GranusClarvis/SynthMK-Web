@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SynthMK — synthetic browser monitoring for Checkmk, self-hosted and open source</title>
-  <meta name="description" content="SynthMK replays real browser journeys from a hardened runner inside your network and reports each one as a native Checkmk service. Record, build visually, or write YAML. MIT-licensed, runs on Checkmk Raw — no Robot Framework, no per-test subscription." />
+  <title>SynthMK: synthetic browser monitoring for Checkmk, self-hosted and open source</title>
+  <meta name="description" content="SynthMK replays real browser journeys from a hardened runner inside your network and reports each one as a native Checkmk service. Record, build visually, or write YAML. MIT-licensed, runs on Checkmk Raw. No Robot Framework, no per-test subscription." />
   <link rel="icon" href="assets/favicon.png" />
   <link rel="stylesheet" href="css/site.css" />
-  <meta property="og:title" content="SynthMK — synthetic browser monitoring for Checkmk" />
+  <meta property="og:title" content="SynthMK: synthetic browser monitoring for Checkmk" />
   <meta property="og:description" content="Record a browser journey, run it on your network, alert in Checkmk. Open source, self-hosted, works on Checkmk Raw." />
   <meta property="og:type" content="website" />
 </head>
@@ -36,7 +36,7 @@
     <span class="kicker">Open source · MIT · Runs on Checkmk Raw</span>
     <h1>Your host checks are green.<br /><em>Can users actually log in?</em></h1>
     <p class="sub">
-      SynthMK replays real browser journeys — sign in, search, check out — from a
+      SynthMK replays real browser journeys (sign in, search, check out) from a
       hardened runner inside your network, and reports each one as a native
       Checkmk service with thresholds, graphs and alerts. No Robot Framework,
       no per-test subscription, no traffic leaving your network.
@@ -62,23 +62,23 @@
     <div class="section-head">
       <p class="eyebrow">Authoring</p>
       <h2>Three ways to define a check</h2>
-      <p class="lead">Whoever owns the application can own its check — no test-automation team required, and no ceiling for the people who want code.</p>
+      <p class="lead">Whoever owns the application can own its check. No test-automation team is required, and there is no ceiling for the people who want code.</p>
     </div>
     <div class="grid-3">
       <div class="card">
         <svg class="icon icon-lg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5" fill="currentColor" stroke="none"/></svg>
         <h3>Record it</h3>
-        <p>Click through the journey once. The browser extension (Chrome, Edge, Firefox) captures every step into readable YAML — and records password fields as secret references, never the value. No extension policy? Export a recording from Chrome DevTools Recorder and import the JSON: every Chrome is already a recorder.</p>
+        <p>Click through the journey once. The browser extension (Chrome, Edge, Firefox) captures every step into readable YAML, and records password fields as secret references, never the value. No extension policy? Export a recording from Chrome DevTools Recorder and import the JSON: every Chrome is already a recorder.</p>
       </div>
       <div class="card">
         <svg class="icon icon-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3l7 17 2.6-6.8L21.5 11z"/><path d="M14 14l5.5 5.5"/></svg>
         <h3>Build it visually</h3>
-        <p>The node dashboard includes a no-code step builder: open a live preview of the page, click an element, pick the action — click, enter text, fill a login from secrets, select a dropdown option, or assert what must be on screen. The output is the same YAML, lint-checked before it saves.</p>
+        <p>The node dashboard includes a no-code step builder: open a live preview of the page, click an element, pick the action: click, enter text, fill a login from secrets, select a dropdown option, or assert what must be on screen. The output is the same YAML, lint-checked before it saves.</p>
       </div>
       <div class="card">
         <svg class="icon icon-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 7l-5 5 5 5M15.5 7l5 5-5 5"/></svg>
         <h3>Write it</h3>
-        <p>Flows are plain YAML files — short, diffable, reviewable in a pull request like any other config. And when declarative steps are not enough, power users can ship full Playwright Python scripts as checks, behind an explicit operator trust gate.</p>
+        <p>Flows are plain YAML files, short enough to diff and review in a pull request like any other config. And when declarative steps are not enough, power users can ship full Playwright Python scripts as checks, behind an explicit operator trust gate.</p>
       </div>
     </div>
     <p style="text-align:center; margin-top: var(--s6);"><a class="btn btn-ghost" href="authoring.html">See all three paths in depth →</a></p>
@@ -146,7 +146,7 @@
           <rect x="482" y="200" width="254" height="40" rx="7"/>
           <rect x="482" y="248" width="254" height="40" rx="7"/>
         </g>
-        <text x="609" y="129" text-anchor="middle" font-size="12.5" fill="#cdd8ea">Scheduler — worker pool, self-monitoring</text>
+        <text x="609" y="129" text-anchor="middle" font-size="12.5" fill="#cdd8ea">Scheduler: worker pool, self-monitoring</text>
         <text x="609" y="177" text-anchor="middle" font-size="12.5" fill="#cdd8ea">Playwright browsers (non-root)</text>
         <text x="609" y="225" text-anchor="middle" font-size="12.5" fill="#cdd8ea">Management dashboard :9181</text>
         <text x="609" y="273" text-anchor="middle" font-size="12.5" fill="#cdd8ea">Screenshot server :9180 (tokenized)</text>
@@ -172,7 +172,7 @@
           <rect x="836" y="220" width="196" height="40" rx="7"/>
         </g>
         <text x="934" y="149" text-anchor="middle" font-size="12.5" fill="#cdd8ea">Native check plugin (MKP)</text>
-        <text x="934" y="197" text-anchor="middle" font-size="12.5" fill="#cdd8ea">Setup ruleset — thresholds</text>
+        <text x="934" y="197" text-anchor="middle" font-size="12.5" fill="#cdd8ea">Setup ruleset: thresholds</text>
         <text x="934" y="245" text-anchor="middle" font-size="12.5" fill="#cdd8ea">Graphs · perf-o-meter · alerts</text>
       </svg>
     </div>
@@ -186,7 +186,7 @@
       <div class="card">
         <div class="num-badge">2</div>
         <h3>Run inside your network</h3>
-        <p>The runner node executes every flow on its own interval with a real browser and publishes results to a spool — so agent polls answer in under half a second no matter how slow the journeys are.</p>
+        <p>The runner node executes every flow on its own interval with a real browser and publishes results to a spool, so agent polls answer in under half a second no matter how slow the journeys are.</p>
       </div>
       <div class="card">
         <div class="num-badge">3</div>
@@ -211,12 +211,12 @@
         For check authors
       </div>
       <div class="grid-3">
-        <div class="feat"><h3>Record in any browser</h3><p>Extension for Chrome, Edge and Firefox with a live editable step list, assertions and thresholds — plus Chrome DevTools Recorder JSON import, so authoring needs no install at all.</p></div>
+        <div class="feat"><h3>Record in any browser</h3><p>Extension for Chrome, Edge and Firefox with a live editable step list, assertions and thresholds, plus Chrome DevTools Recorder JSON import, so authoring needs no install at all.</p></div>
         <div class="feat"><h3>Selector fallback arrays</h3><p>Any step can carry multiple locators tried in order. When a frontend deploy renames an ID, the check keeps passing on the text or role selector instead of paging someone at 03:00.</p></div>
-        <div class="feat"><h3>Assertions that read like English</h3><p>Text visible, text absent, title, URL, element count, element attribute, checkbox state. Failures produce a plain sentence — “Expected text 'Dashboard' not found” — not a stack trace.</p></div>
+        <div class="feat"><h3>Assertions that read like English</h3><p>Text visible, text absent, title, URL, element count, element attribute, checkbox state. Failures produce a plain sentence like “Expected text 'Dashboard' not found” instead of a stack trace.</p></div>
         <div class="feat"><h3>Reusable sub-flows</h3><p>Define the login sequence once and include it from every journey that needs it. Change the login page, update one file.</p></div>
         <div class="feat"><h3>Anti-flake step vocabulary</h3><p><code>wait_for_element</code>, <code>wait_for_url</code>, <code>wait_for_network_idle</code>, <code>optional: true</code> for consent banners, per-step timeouts, and a hard run timeout behind it all.</p></div>
-        <div class="feat"><h3>Playwright when you need it</h3><p>Declarative YAML covers the common 90%. For the rest, ship a Playwright Python script as a check — same service output, same screenshots, gated by the operator.</p></div>
+        <div class="feat"><h3>Playwright when you need it</h3><p>Declarative YAML covers the common 90%. For the rest, ship a Playwright Python script as a check: same service output, same screenshots, gated by the operator.</p></div>
       </div>
     </div>
 
@@ -227,11 +227,11 @@
       </div>
       <div class="grid-3">
         <div class="feat"><h3>One-container appliance</h3><p>Browsers pre-installed, scheduler, dashboard and screenshot server in a single image. No per-host environment builds, nothing to assemble on the probe.</p></div>
-        <div class="feat"><h3>Native Checkmk integration</h3><p>A real check plugin — discovery, unit-aware duration graphs with threshold bands, perf-o-meter, per-step metrics — and a Setup ruleset so thresholds are a Checkmk rule, not a file edit on the node.</p></div>
-        <div class="feat"><h3>Node dashboard</h3><p>Live states with per-step timings, one-click run-now, pause/resume, tags for grouping, and a flow editor that lints before every save — invalid YAML never lands on disk.</p></div>
+        <div class="feat"><h3>Native Checkmk integration</h3><p>A real check plugin (discovery, unit-aware duration graphs with threshold bands, perf-o-meter, per-step metrics) and a Setup ruleset, so thresholds are a Checkmk rule rather than a file edit on the node.</p></div>
+        <div class="feat"><h3>Node dashboard</h3><p>Live states with per-step timings, one-click run-now, pause/resume, tags for grouping, and a flow editor that lints before every save, so invalid YAML never lands on disk.</p></div>
         <div class="feat"><h3>Version history &amp; rollback</h3><p>Every flow edit through the dashboard is versioned. A bad change is one click away from the previous known-good revision, and the audit log records who changed what, when.</p></div>
         <div class="feat"><h3>Scheduler that scales honestly</h3><p>Worker pool with stagger, overlap suppression and hard timeouts. Measured: 60 flows, ≈37 runs/min sustained on one default node, zero overdue.</p></div>
-        <div class="feat"><h3>Self-monitoring by design</h3><p>If the node is oversubscribed, the <em>SynthMK Scheduler</em> service goes WARN on the node — your monitored applications never show false CRITs because the probe is busy.</p></div>
+        <div class="feat"><h3>Self-monitoring by design</h3><p>If the node is oversubscribed, the <em>SynthMK Scheduler</em> service goes WARN on the node, and your monitored applications never show false CRITs because the probe is busy.</p></div>
       </div>
     </div>
 
@@ -241,12 +241,12 @@
         For security teams
       </div>
       <div class="grid-3">
-        <div class="feat"><h3>Secrets with hard redaction</h3><p>Credentials live in a chmod-600 file on the node — loose permissions are refused at startup. Flows reference <code>{{ secret.name }}</code> by name; resolved values are scrubbed from every output, log and error message.</p></div>
-        <div class="feat"><h3>The recorder never sees passwords</h3><p>Typing into a password field records a secret reference and a <code>sensitive</code> flag. The value never enters the extension, the YAML, or the screenshots — fields are masked before capture.</p></div>
-        <div class="feat"><h3>TOTP / MFA logins</h3><p><code>{{ totp.name }}</code> generates RFC 6238 codes from a base32 seed in the same protected secrets file — monitor MFA-enforced logins without weakening the account.</p></div>
-        <div class="feat"><h3>Authenticated everything</h3><p>Screenshots are served with per-file HMAC tokens — no listing, no traversal. The dashboard sits behind token sign-in with CSRF protection and constant-time comparisons.</p></div>
+        <div class="feat"><h3>Secrets with hard redaction</h3><p>Credentials live in a chmod-600 file on the node. Loose permissions are refused at startup. Flows reference <code>{{ secret.name }}</code> by name; resolved values are scrubbed from every output, log and error message.</p></div>
+        <div class="feat"><h3>The recorder never sees passwords</h3><p>Typing into a password field records a secret reference and a <code>sensitive</code> flag. The value never enters the extension, the YAML, or the screenshots; fields are masked before capture.</p></div>
+        <div class="feat"><h3>TOTP / MFA logins</h3><p><code>{{ totp.name }}</code> generates RFC 6238 codes from a base32 seed in the same protected secrets file, so you can monitor MFA-enforced logins without weakening the account.</p></div>
+        <div class="feat"><h3>Authenticated everything</h3><p>Screenshots are served with per-file HMAC tokens. No listing, no traversal. The dashboard sits behind token sign-in with CSRF protection and constant-time comparisons.</p></div>
         <div class="feat"><h3>Hardened container</h3><p>Browsers run as an unprivileged user, the shipped compose sets memory/CPU limits and <code>no-new-privileges</code>, and the agent transport supports certificate-based TLS via the official Checkmk controller.</p></div>
-        <div class="feat"><h3>Script checks are opt-in</h3><p>Arbitrary Playwright code on a probe is remote code execution by design — so it ships disabled. The operator must explicitly enable a trusted scripts directory before any code check runs.</p></div>
+        <div class="feat"><h3>Script checks are opt-in</h3><p>Arbitrary Playwright code on a probe is remote code execution by design, so it ships disabled. The operator must explicitly enable a trusted scripts directory before any code check runs.</p></div>
       </div>
     </div>
 
@@ -259,15 +259,15 @@
     <div class="section-head">
       <p class="eyebrow">Positioning</p>
       <h2>Where SynthMK sits next to Robotmk</h2>
-      <p class="lead">Checkmk's official synthetic monitoring is built on Robot Framework and sold with commercial editions. SynthMK serves the teams underneath that line — factually, here is the difference.</p>
+      <p class="lead">Checkmk's official synthetic monitoring is built on Robot Framework and sold with commercial editions. SynthMK serves the teams underneath that line. Here is the difference, stated factually.</p>
     </div>
     <div class="table-scroll">
       <table class="cmp cmp-hl">
         <thead><tr><th scope="col"></th><th scope="col">Checkmk Synthetic Monitoring (Robotmk)</th><th scope="col">SynthMK</th></tr></thead>
         <tbody>
-          <tr><td>Checkmk edition</td><td class="no">Commercial editions, separate per-test subscription</td><td class="yes">Raw / CRE — free, MIT-licensed</td></tr>
+          <tr><td>Checkmk edition</td><td class="no">Commercial editions, separate per-test subscription</td><td class="yes">Raw / CRE, free and MIT-licensed</td></tr>
           <tr><td>Engine</td><td class="no">Robot Framework keyword suites</td><td class="yes">Playwright, driven by readable YAML</td></tr>
-          <tr><td>Authoring</td><td class="no">Hand-written <code>.robot</code> files</td><td class="yes">Record, visual builder, YAML — or Playwright code</td></tr>
+          <tr><td>Authoring</td><td class="no">Hand-written <code>.robot</code> files</td><td class="yes">Record, visual builder, YAML, or Playwright code</td></tr>
           <tr><td>Probe environment</td><td class="no">RCC environment builds per test host</td><td class="yes">One pre-baked container, browsers included</td></tr>
           <tr><td>Credentials</td><td class="no">Environment variables, plaintext in agent config</td><td class="yes">0600 secrets file, output-redacted, screenshot-masked</td></tr>
           <tr><td>Per-step visibility</td><td class="yes">Keyword-level services (rich)</td><td class="yes">Per-step metrics and breakdown on every service</td></tr>
@@ -275,7 +275,7 @@
         </tbody>
       </table>
     </div>
-    <p style="text-align:center; margin-top: var(--s6);"><a class="btn btn-ghost" href="compare.html">Full comparison — Robotmk, Datadog, Checkly, Uptime Kuma →</a></p>
+    <p style="text-align:center; margin-top: var(--s6);"><a class="btn btn-ghost" href="compare.html">Full comparison: Robotmk, Datadog, Checkly, Uptime Kuma →</a></p>
   </div>
 </section>
 
@@ -289,7 +289,7 @@
     <div class="qs">
       <div class="term">
         <button class="copy" data-copy="qs">copy</button>
-        <pre id="qs"><span class="c"># 1 — the runner node (any Docker host inside your network)</span>
+        <pre id="qs"><span class="c"># 1. the runner node (any Docker host inside your network)</span>
 git clone https://github.com/GranusClarvis/SynthMK.git &amp;&amp; cd SynthMK
 docker build -f runner-node/Dockerfile -t synthmk-runner .
 docker run -d --name synthmk-runner \
@@ -298,18 +298,18 @@ docker run -d --name synthmk-runner \
   -e SYNTHMK_SHOT_BASE_URL="http://&lt;node-lan-ip&gt;:9180" \
   synthmk-runner
 
-<span class="c"># 2 — the Checkmk plugin (on your site)</span>
+<span class="c"># 2. the Checkmk plugin (on your site)</span>
 mkp add synthmk.mkp &amp;&amp; mkp enable synthmk
 
-<span class="c"># 3 — add the node as a host in Checkmk, run service discovery.</span>
-<span class="t"># Every flow appears as a service — graphs, thresholds, alerts included.</span></pre>
+<span class="c"># 3. add the node as a host in Checkmk, run service discovery.</span>
+<span class="t"># Every flow appears as a service with graphs, thresholds and alerts included.</span></pre>
       </div>
       <div class="qs-text prose">
         <h3>Then create your first real check</h3>
         <ol>
           <li>Open the node dashboard at <code>http://&lt;node&gt;:9181</code> and sign in with the admin token.</li>
           <li>Author the check your way: record it with the <a href="#download">extension</a>, import a Chrome DevTools recording, or click it together in the visual step builder.</li>
-          <li>Add an assertion (what must be on screen), set warn/crit thresholds, save — the editor lints first, and the check is live on the next interval.</li>
+          <li>Add an assertion (what must be on screen), set warn/crit thresholds, save. The editor lints first, and the check is live on the next interval.</li>
           <li>Watch it appear in Checkmk as a normal service with graphs and alerting.</li>
         </ol>
         <p><a href="docs/index.html">Step-by-step documentation →</a></p>
@@ -323,12 +323,12 @@ mkp add synthmk.mkp &amp;&amp; mkp enable synthmk
     <div class="section-head">
       <p class="eyebrow">Evidence</p>
       <h2>Real screenshots, real lab</h2>
-      <p class="lead">Every release is verified end-to-end against a self-hosted Checkmk Raw 2.3 lab before it ships. These captures are from that lab — nothing staged.</p>
+      <p class="lead">Every release is verified end-to-end against a self-hosted Checkmk Raw 2.3 lab before it ships. These captures are from that lab, nothing staged.</p>
     </div>
     <div class="grid-2">
       <figure class="shot-frame">
         <img src="assets/cmk-services.png" alt="SynthMK synthetic services listed inside Checkmk with states and perf-o-meters" width="1600" height="950" loading="lazy" />
-        <figcaption>Synthetic journeys as first-class Checkmk services — states, summaries, perf-o-meters.</figcaption>
+        <figcaption>Synthetic journeys as first-class Checkmk services: states, summaries, perf-o-meters.</figcaption>
       </figure>
       <figure class="shot-frame">
         <img src="assets/cmk-service-detail.png" alt="Checkmk service detail for a SynthMK journey with per-step breakdown and screenshot link" width="1600" height="950" loading="lazy" />
@@ -336,11 +336,11 @@ mkp add synthmk.mkp &amp;&amp; mkp enable synthmk
       </figure>
       <figure class="shot-frame">
         <img src="assets/node-dashboard.png" alt="SynthMK runner node management dashboard with live check states and per-step timings" width="1500" height="900" loading="lazy" />
-        <figcaption>The node's own dashboard — live states, step timings, run-now, editor.</figcaption>
+        <figcaption>The node's own dashboard: live states, step timings, run-now, editor.</figcaption>
       </figure>
       <figure class="shot-frame">
         <img src="assets/node-editor.png" alt="SynthMK node flow editor showing YAML with linting before save" width="1500" height="955" loading="lazy" />
-        <figcaption>The flow editor lints before saving — invalid YAML never reaches disk.</figcaption>
+        <figcaption>The flow editor lints before saving, so invalid YAML never reaches disk.</figcaption>
       </figure>
     </div>
   </div>
@@ -364,14 +364,14 @@ mkp add synthmk.mkp &amp;&amp; mkp enable synthmk
       <div class="card dl-card">
         <svg class="icon icon-lg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5" fill="currentColor" stroke="none"/></svg>
         <h3>Browser recorder</h3>
-        <p>The recorder extension for Chrome and Edge (one package) or Firefox. Load via your browser's developer mode; store listings are on the roadmap. Or skip it — Chrome DevTools Recorder JSON imports directly.</p>
+        <p>The recorder extension for Chrome and Edge (one package) or Firefox. Load via your browser's developer mode; store listings are on the roadmap. Or skip it: Chrome DevTools Recorder JSON imports directly.</p>
         <a class="btn btn-primary" href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk-recorder-chrome.zip">Chrome / Edge .zip</a>
         <div class="dl-meta"><a href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk-recorder-firefox.zip">Firefox build</a> · Manifest V3</div>
       </div>
       <div class="card dl-card">
         <svg class="icon icon-lg" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="7" rx="2"/><rect x="4" y="13" width="16" height="7" rx="2"/><path d="M8 7.5h.01M8 16.5h.01"/></svg>
         <h3>Runner node</h3>
-        <p>The appliance builds from source in one command — pinned Playwright and browsers included. A hardened compose template ships in <code>runner-node/</code>.</p>
+        <p>The appliance builds from source in one command, with pinned Playwright and browsers included. A hardened compose template ships in <code>runner-node/</code>.</p>
         <a class="btn btn-primary" href="https://github.com/GranusClarvis/SynthMK">Get the source</a>
         <div class="dl-meta">docker build · browsers included in the image</div>
       </div>
@@ -404,8 +404,8 @@ mkp add synthmk.mkp &amp;&amp; mkp enable synthmk
       <div>
         <h4>Download</h4>
         <a href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk.mkp">Checkmk plugin (.mkp)</a>
-        <a href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk-recorder-chrome.zip">Recorder — Chrome/Edge</a>
-        <a href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk-recorder-firefox.zip">Recorder — Firefox</a>
+        <a href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk-recorder-chrome.zip">Recorder (Chrome/Edge)</a>
+        <a href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk-recorder-firefox.zip">Recorder (Firefox)</a>
       </div>
     </div>
     <div class="foot-base">
