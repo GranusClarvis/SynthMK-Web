@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SynthMK vs Robotmk, Datadog, Checkly, Uptime Kuma · SynthMK</title>
+  <meta name="description" content="A factual comparison: SynthMK vs Checkmk's official Robotmk synthetic monitoring, and where SynthMK sits next to Datadog Synthetics, Checkly, Grafana Synthetic Monitoring and Uptime Kuma." />
+  <link rel="icon" href="assets/favicon.png" />
+  <link rel="stylesheet" href="css/site.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap nav-inner">
+    <a class="brand" href="index.html"><img src="assets/logo.png" alt="" width="128" height="128" /><span>Synth<b>MK</b></span></a>
+    <button class="nav-toggle" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav-links" aria-label="Main">
+      <a href="index.html#how">How it works</a>
+      <a href="authoring.html">Authoring</a>
+      <a href="enterprise.html">Security &amp; Ops</a>
+      <a href="compare.html" aria-current="page">Compare</a>
+      <a href="docs/index.html">Docs</a>
+      <a href="https://github.com/GranusClarvis/SynthMK">GitHub</a>
+      <a class="nav-cta" href="index.html#download">Download</a>
+    </nav>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="wrap">
+    <p class="eyebrow">Comparisons</p>
+    <h1>Where SynthMK fits — and where it doesn't</h1>
+    <p class="lead prose">Written by the SynthMK project, last reviewed June 2026. Vendors change their products and pricing; every section links the primary source so you can verify the current state yourself. Where a competitor is the better fit, this page says so.</p>
+  </div>
+</section>
+
+<section class="section" id="robotmk">
+  <div class="wrap">
+    <div class="section-head left">
+      <p class="eyebrow">The main event</p>
+      <h2 style="text-align:left;">vs Checkmk Synthetic Monitoring (Robotmk)</h2>
+      <p class="lead prose" style="margin-left:0; text-align:left;">Checkmk's official synthetic monitoring is <a href="https://checkmk.com/product/synthetic-monitoring">a commercial add-on</a> built on <a href="https://robotframework.org/">Robot Framework</a> via <a href="https://docs.checkmk.com/latest/en/synthetic_monitoring.html">Robotmk</a>. It is a serious, supported product — and it is aimed at organizations a tier above the teams SynthMK serves. The differences below are structural, not cosmetic.</p>
+    </div>
+
+    <div class="table-scroll">
+      <table class="cmp cmp-hl">
+        <thead><tr><th scope="col"></th><th scope="col">Checkmk Synthetic Monitoring (Robotmk)</th><th scope="col">SynthMK</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Licensing</td>
+            <td class="no">Requires a commercial Checkmk edition, plus a separate synthetic-monitoring subscription licensed per test — see <a href="https://checkmk.com/product/synthetic-monitoring">checkmk.com</a> for current terms</td>
+            <td class="yes">MIT license. Runs on Checkmk Raw (free) and commercial editions alike. No per-test, per-run or per-seat fees — it is open source</td>
+          </tr>
+          <tr>
+            <td>Authoring model</td>
+            <td class="no">Robot Framework keyword suites (<code>.robot</code> files) written by hand; typically a test-automation skillset</td>
+            <td class="yes">Record in the browser, import a Chrome DevTools recording, click together in the visual builder, or write YAML — Playwright Python for the cases that need code</td>
+          </tr>
+          <tr>
+            <td>Probe environment</td>
+            <td class="no">RCC builds Python environments on each test host; environment management is the most common operational complaint in community forums</td>
+            <td class="yes">One pre-baked Docker image with pinned Playwright and browsers. Nothing is built on the probe, ever</td>
+          </tr>
+          <tr>
+            <td>Credentials</td>
+            <td class="no">Secrets passed as environment variables, stored in agent configuration</td>
+            <td class="yes">chmod-600 secrets file on the node, refused if readable by others; values redacted from all output and masked in screenshots; TOTP support for MFA accounts</td>
+          </tr>
+          <tr>
+            <td>Per-step visibility</td>
+            <td class="yes">Rich: keywords can surface as their own services with their own thresholds</td>
+            <td class="yes">Per-step metrics, graphs and a step breakdown on every service — one service per journey, steps as metrics</td>
+          </tr>
+          <tr>
+            <td>Failure artifacts</td>
+            <td class="yes">Robot Framework HTML logs attached to results (commercial editions)</td>
+            <td class="yes">Failure screenshots served from the node behind per-file HMAC tokens, linked from the service</td>
+          </tr>
+          <tr>
+            <td>Check management</td>
+            <td class="no">Agent Bakery rules; suite changes are file deployments</td>
+            <td class="yes">Node dashboard: lint-gated editor, run-now, pause/resume, tags, version history with rollback, audit log — plus Setup-ruleset thresholds in Checkmk itself</td>
+          </tr>
+          <tr>
+            <td>Footprint</td>
+            <td class="no">A platform: scheduler agent plugin, RCC, suite repositories, bakery configuration</td>
+            <td class="yes">One container, one MKP, one optional browser extension</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="grid-2" style="margin-top: var(--s6);">
+      <div class="card prose">
+        <h3>Choose Robotmk when…</h3>
+        <p>You already run a commercial Checkmk edition and want vendor support with an SLA. Your team already writes Robot Framework and owns suite libraries. You need keyword-level service granularity, bakery-managed fleet deployment, or RF's ecosystem beyond the browser (desktop automation, API keyword libraries). Those are real advantages and SynthMK does not pretend to replace them.</p>
+      </div>
+      <div class="card prose">
+        <h3>Choose SynthMK when…</h3>
+        <p>You run Checkmk Raw and "is the login flow working?" should not require a procurement cycle. Your checks are authored by the people who own the applications, not a test-automation team. You want the probe to be one auditable container, credentials to be provably redacted, and the whole thing reviewable on GitHub before you deploy it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="others">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">The wider field</p>
+      <h2>Other tools you may be evaluating</h2>
+      <p class="lead">Different lanes, honestly framed. SynthMK's lane: self-hosted, Checkmk-native, no per-run pricing.</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card prose">
+        <h3>Datadog Synthetic Monitoring</h3>
+        <p>A polished SaaS with browser tests, global locations and deep APM correlation — <a href="https://www.datadoghq.com/pricing/">priced per test run</a>, with results living in Datadog's cloud. If your monitoring estate is Datadog, use it. If your estate is Checkmk and your apps are internal, SynthMK keeps journeys, credentials and screenshots inside your network, alerts through the Checkmk pipeline you already operate, and costs nothing per run.</p>
+      </div>
+      <div class="card prose">
+        <h3>Checkly</h3>
+        <p><a href="https://www.checklyhq.com/">Checkly</a> defines the state of the art for Playwright-as-code monitoring — monitoring-as-code workflows, excellent developer experience, SaaS control plane with usage-based pricing. SynthMK borrows its best idea (Playwright underneath, code as the escape hatch) but inverts the control plane: Checkmk is the scheduler-of-record and UI, everything runs on your hardware, and the default authoring path needs no code at all.</p>
+      </div>
+      <div class="card prose">
+        <h3>Grafana Synthetic Monitoring</h3>
+        <p><a href="https://grafana.com/products/cloud/synthetic-monitoring/">Grafana's offering</a> (k6-based) is a Grafana Cloud feature: convenient if you live in that ecosystem, but the control plane is theirs and usage is metered. SynthMK is the equivalent capability for Checkmk shops — native services and graphs in the tool your NOC already watches, fully self-hosted.</p>
+      </div>
+      <div class="card prose">
+        <h3>Uptime Kuma</h3>
+        <p><a href="https://github.com/louislam/uptime-kuma">Uptime Kuma</a> proves the demand for simple self-hosted monitoring — it is excellent at "is it up?" pings and status pages. It does not do multi-step browser journeys (log in, add to cart, assert the result), and it brings its own alerting stack. SynthMK starts where Kuma stops: real user journeys, reported into Checkmk's alerting, graphing and escalation instead of a parallel system.</p>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top: var(--s6);">
+      <b>How to verify this page:</b> every claim about SynthMK links to public code or test evidence in <a href="https://github.com/GranusClarvis/SynthMK">the repository</a>; every claim about another product links to that vendor's own page. If anything here is out of date, <a href="https://github.com/GranusClarvis/SynthMK/issues">open an issue</a> and it will be corrected.
+    </div>
+
+    <div class="cta-row" style="margin-top: var(--s7);">
+      <a class="btn btn-primary" href="index.html#quickstart">Try SynthMK in five minutes</a>
+      <a class="btn" href="enterprise.html">Read the security model</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-about">
+        <a class="brand" href="index.html"><img src="assets/logo.png" alt="" width="128" height="128" /><span>Synth<b>MK</b></span></a>
+        <p>Open-source synthetic browser monitoring for Checkmk. Self-hosted, MIT-licensed, verified against Checkmk Raw 2.3.</p>
+      </div>
+      <div>
+        <h4>Product</h4>
+        <a href="authoring.html">Authoring</a>
+        <a href="enterprise.html">Security &amp; operations</a>
+        <a href="compare.html">Comparisons</a>
+        <a href="docs/index.html">Documentation</a>
+      </div>
+      <div>
+        <h4>Project</h4>
+        <a href="https://github.com/GranusClarvis/SynthMK">GitHub</a>
+        <a href="https://github.com/GranusClarvis/SynthMK/releases">Releases</a>
+        <a href="https://github.com/GranusClarvis/SynthMK/blob/main/CHANGELOG.md">Changelog</a>
+        <a href="https://github.com/GranusClarvis/SynthMK/blob/main/docs/STATUS.md">Test evidence</a>
+        <a href="https://github.com/GranusClarvis/SynthMK/issues">Issues</a>
+      </div>
+      <div>
+        <h4>Download</h4>
+        <a href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk.mkp">Checkmk plugin (.mkp)</a>
+        <a href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk-recorder-chrome.zip">Recorder — Chrome/Edge</a>
+        <a href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk-recorder-firefox.zip">Recorder — Firefox</a>
+      </div>
+    </div>
+    <div class="foot-base">
+      <span>MIT licensed. © SynthMK contributors.</span>
+      <span>Not affiliated with Checkmk GmbH. Checkmk is a trademark of Checkmk GmbH.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Authoring checks — record, build visually, or write code · SynthMK</title>
+  <meta name="description" content="Three ways to author a SynthMK synthetic check: record in the browser (extension or Chrome DevTools Recorder import), build visually in the node dashboard, or write YAML and Playwright code." />
+  <link rel="icon" href="assets/favicon.png" />
+  <link rel="stylesheet" href="css/site.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap nav-inner">
+    <a class="brand" href="index.html"><img src="assets/logo.png" alt="" width="128" height="128" /><span>Synth<b>MK</b></span></a>
+    <button class="nav-toggle" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav-links" aria-label="Main">
+      <a href="index.html#how">How it works</a>
+      <a href="authoring.html" aria-current="page">Authoring</a>
+      <a href="enterprise.html">Security &amp; Ops</a>
+      <a href="compare.html">Compare</a>
+      <a href="docs/index.html">Docs</a>
+      <a href="https://github.com/GranusClarvis/SynthMK">GitHub</a>
+      <a class="nav-cta" href="index.html#download">Download</a>
+    </nav>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="wrap">
+    <p class="eyebrow">Authoring</p>
+    <h1>Three paths to the same readable check</h1>
+    <p class="lead">Record it, click it together, or write it. Every path produces the same artifact — a short YAML flow you can read, diff and review — so a check started by an application owner can be refined by an engineer without translation.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+
+    <!-- ============ PATH 1: RECORD ============ -->
+    <div class="split">
+      <div class="prose">
+        <span class="tag">Path 1 — Record</span>
+        <h3>Click through the journey once</h3>
+        <p>Install the recorder extension (Chrome, Edge or Firefox), open your application, press <b>Start</b>, and do the journey like a user. Every click, keystroke, dropdown selection and Enter press lands in a live step list you can edit on the spot — delete a mis-click, add an assertion, set warn/crit thresholds, export.</p>
+        <ul class="checklist">
+          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg><span><b>Passwords never enter the recording.</b> Typing into a password field records <code>{{ secret.password }}</code> with a <code>sensitive</code> flag — the value stays on the page.</span></li>
+          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg><span><b>Assertions before export.</b> Add “visible text”, “title contains” or “URL contains” checks directly in the popup, so the flow asserts an outcome — not just that clicking didn't crash.</span></li>
+          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg><span><b>Exports lint-clean YAML.</b> The exported file passes the same linter the runner uses — verified by a real-browser end-to-end test on every release.</span></li>
+        </ul>
+      </div>
+      <figure class="shot-frame shot-portrait">
+        <img src="assets/recorder-popup.png" alt="SynthMK recorder extension popup showing a live step list with assertions and threshold settings" width="420" height="760" loading="lazy" />
+        <figcaption>The recorder popup: live step list, assertions, thresholds, one-click YAML export.</figcaption>
+      </figure>
+    </div>
+
+    <div class="split">
+      <div class="prose">
+        <span class="tag">Path 1b — No extension needed</span>
+        <h3>Import from Chrome DevTools Recorder</h3>
+        <p>Locked-down desktops where extensions need an approval ticket? Every Chrome already ships a recorder. Open <b>DevTools → Recorder</b>, record the journey, export the recording as JSON, and import it on the node dashboard. SynthMK converts the recording's steps and selectors into the same readable YAML flow.</p>
+        <p>That makes authoring possible from any machine with Chrome — no software request, no developer mode, nothing installed.</p>
+        <div class="callout">
+          <b>Tip:</b> DevTools recordings carry several selector candidates per step (CSS, ARIA, text). The importer keeps them as a fallback array, so imported checks start out flake-resistant.
+        </div>
+      </div>
+      <div class="term" aria-label="DevTools import example">
+        <pre><span class="c"># What the importer produces from a DevTools recording</span>
+name: "Synthetic Portal Login"
+warn_ms: 4000
+crit_ms: 10000
+steps:
+  - action: open_url
+    url: "https://portal.example.lan/login"
+  - action: fill
+    selector:
+      - "#username"
+      - "input[name='user']"        <span class="c"># fallback array from</span>
+      - "aria/Username"             <span class="c"># the recording's candidates</span>
+    value: "{{ secret.portal_user }}"
+  - action: fill
+    selector: "#password"
+    value: "{{ secret.portal_password }}"
+    sensitive: true
+  - action: press
+    key: "Enter"
+  - action: check_visible_text
+    text: "Dashboard"</pre>
+      </div>
+    </div>
+
+    <!-- ============ PATH 2: VISUAL BUILDER ============ -->
+    <div class="split">
+      <div class="prose">
+        <span class="tag">Path 2 — Build visually</span>
+        <h3>Point at the page, pick the action</h3>
+        <p>The node dashboard includes a no-code step builder. Open a live preview of the target page, click the element you care about, and choose what should happen there:</p>
+        <ul class="checklist">
+          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3l7 17 2.6-6.8L21.5 11z"/></svg><span><b>Interact</b> — click it, enter text, fill username/password from the node's secrets store, choose a dropdown option.</span></li>
+          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg><span><b>Assert</b> — this text must be visible, this text must be absent, this attribute must have this value, this checkbox must be checked.</span></li>
+          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span><b>Tune</b> — name the check, set its interval and warn/crit thresholds, and save. The builder writes the same lint-checked YAML as every other path.</span></li>
+        </ul>
+        <p>Because the builder selects elements from the live page, it generates selector fallback arrays the same way the importer does — and because it runs on the node, the flow is scheduled the moment you save it.</p>
+        <!-- TODO(v0.5 screenshot): replace node-editor.png with a real step-builder capture once the v0.5 lab screenshots are taken. -->
+      </div>
+      <figure class="shot-frame">
+        <img src="assets/node-editor.png" alt="SynthMK node dashboard flow editor with YAML linting before save" width="1500" height="955" loading="lazy" />
+        <figcaption>The dashboard's flow editor — the step builder and the YAML view edit the same flow, and the linter gates every save.</figcaption>
+      </figure>
+    </div>
+
+    <!-- ============ PATH 3: WRITE ============ -->
+    <div class="split">
+      <div class="prose">
+        <span class="tag">Path 3 — Write</span>
+        <h3>YAML that fits in a code review</h3>
+        <p>Flows are deliberately small and declarative: a name, thresholds, and an ordered list of steps. They live in a directory you can mount from git, so checks go through the same pull-request review as the application they monitor.</p>
+        <p>The step vocabulary covers real journeys without turning into a programming language: navigation, clicks, fills, key presses, dropdowns, hovers, scrolls, explicit waits (<code>wait_for_element</code>, <code>wait_for_url</code>, <code>wait_for_network_idle</code>), evidence screenshots, and the full assertion set. Steps marked <code>optional: true</code> absorb cookie-consent banners without failing the journey.</p>
+        <p><b>Reusable sub-flows</b> keep journeys DRY: define the login sequence once, include it from every flow that needs it, and a login-page change becomes a one-file fix.</p>
+        <p class="prose"><a href="docs/index.html#schema">Full flow reference in the docs →</a></p>
+      </div>
+      <!-- TODO(v0.5 syntax): confirm final sub-flow include syntax (`use:`) and selector-array key against the shipped v0.5 schema before publish. -->
+      <div class="term" aria-label="Flow YAML example">
+        <pre><span class="c"># flows/checkout.yaml — a complete production check</span>
+name: "Synthetic Shop Checkout"
+warn_ms: 5000
+crit_ms: 12000
+screenshot_on_failure: true
+checkmk_host: shop-frontend     <span class="c"># attribute to the app's host</span>
+steps:
+  - use: subflows/login.yaml    <span class="c"># shared login sub-flow</span>
+  - action: click
+    selector:
+      - "[data-test=add-to-cart]"
+      - "text=Add to cart"      <span class="c"># fallback selector</span>
+  - action: click
+    selector: "#checkout"
+  - action: wait_for_url
+    contains: "/order/confirm"
+  - action: check_visible_text
+    text: "Order confirmed"
+  - action: check_text_absent
+    text: "error"</pre>
+      </div>
+    </div>
+
+    <div class="split">
+      <div class="prose">
+        <span class="tag">Path 3+ — The code path</span>
+        <h3>Playwright Python, behind a trust gate</h3>
+        <p>Some checks genuinely need code — multi-tab dances, conditional paths, API setup before the browser opens. For those, SynthMK runs full <b>Playwright Python scripts as checks</b>: same scheduler, same service output contract, same screenshots and redaction.</p>
+        <p>Running operator-supplied code on a monitoring probe is remote code execution by design, so this path is <b>disabled by default</b>. The operator must explicitly enable a trusted scripts directory on the node before any script check executes — authors cannot turn it on from the dashboard. <a href="enterprise.html#script-trust">How the trust gate works →</a></p>
+      </div>
+      <!-- TODO(v0.5 syntax): confirm the script-check API surface (decorator vs plain function contract) against the shipped v0.5 implementation before publish. -->
+      <div class="term" aria-label="Script check example">
+        <pre><span class="c"># scripts/multi_tab_journey.py — runs as a normal check</span>
+from synthmk import check
+
+@check(name="Synthetic Handover Journey",
+       warn_ms=8000, crit_ms=20000)
+def run(page, secrets):
+    page.goto("https://portal.example.lan")
+    page.fill("#user", secrets["portal_user"])
+    page.fill("#pw", secrets["portal_password"])
+    page.click("text=Sign in")
+    with page.expect_popup() as tab:
+        page.click("text=Open report")
+    assert "Quarterly" in tab.value.title()</pre>
+      </div>
+    </div>
+
+    <!-- ============ WHICH PATH ============ -->
+    <div class="section-head" style="margin-top: var(--s8);">
+      <h2>Which path, when?</h2>
+    </div>
+    <div class="table-scroll">
+      <table class="cmp">
+        <thead><tr><th scope="col">You are…</th><th scope="col">Best path</th><th scope="col">Why</th></tr></thead>
+        <tbody>
+          <tr><td>An application owner who wants “is login broken?”</td><td class="yes">Record, or visual builder</td><td>No tooling beyond a browser; the result is already a reviewable file.</td></tr>
+          <tr><td>On a locked-down desktop, no extensions allowed</td><td class="yes">DevTools Recorder import</td><td>Chrome's built-in recorder + a JSON upload — nothing to install.</td></tr>
+          <tr><td>An SRE managing dozens of checks in git</td><td class="yes">YAML by hand</td><td>Diffable, templatable, sub-flows for shared logins, reviewed like code.</td></tr>
+          <tr><td>Automating something genuinely complex</td><td class="yes">Playwright script check</td><td>Full code power, same monitoring contract — once the operator enables it.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="cta-row" style="margin-top: var(--s7);">
+      <a class="btn btn-primary" href="index.html#download">Download SynthMK</a>
+      <a class="btn" href="docs/index.html">Read the docs</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-about">
+        <a class="brand" href="index.html"><img src="assets/logo.png" alt="" width="128" height="128" /><span>Synth<b>MK</b></span></a>
+        <p>Open-source synthetic browser monitoring for Checkmk. Self-hosted, MIT-licensed, verified against Checkmk Raw 2.3.</p>
+      </div>
+      <div>
+        <h4>Product</h4>
+        <a href="authoring.html">Authoring</a>
+        <a href="enterprise.html">Security &amp; operations</a>
+        <a href="compare.html">Comparisons</a>
+        <a href="docs/index.html">Documentation</a>
+      </div>
+      <div>
+        <h4>Project</h4>
+        <a href="https://github.com/GranusClarvis/SynthMK">GitHub</a>
+        <a href="https://github.com/GranusClarvis/SynthMK/releases">Releases</a>
+        <a href="https://github.com/GranusClarvis/SynthMK/blob/main/CHANGELOG.md">Changelog</a>
+        <a href="https://github.com/GranusClarvis/SynthMK/blob/main/docs/STATUS.md">Test evidence</a>
+        <a href="https://github.com/GranusClarvis/SynthMK/issues">Issues</a>
+      </div>
+      <div>
+        <h4>Download</h4>
+        <a href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk.mkp">Checkmk plugin (.mkp)</a>
+        <a href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk-recorder-chrome.zip">Recorder — Chrome/Edge</a>
+        <a href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk-recorder-firefox.zip">Recorder — Firefox</a>
+      </div>
+    </div>
+    <div class="foot-base">
+      <span>MIT licensed. © SynthMK contributors.</span>
+      <span>Not affiliated with Checkmk GmbH. Checkmk is a trademark of Checkmk GmbH.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/site.js"></script>
+</body>
+</html>

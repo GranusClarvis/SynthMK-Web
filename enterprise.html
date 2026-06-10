@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Security &amp; operations — secrets, hardening, scale evidence · SynthMK</title>
+  <meta name="description" content="SynthMK's security model in full: secrets with hard redaction, TOTP, TLS agent transport, container hardening, dashboard auth, audit log, measured scale evidence — and the residual risks the operator still owns." />
+  <link rel="icon" href="assets/favicon.png" />
+  <link rel="stylesheet" href="css/site.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap nav-inner">
+    <a class="brand" href="index.html"><img src="assets/logo.png" alt="" width="128" height="128" /><span>Synth<b>MK</b></span></a>
+    <button class="nav-toggle" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav-links" aria-label="Main">
+      <a href="index.html#how">How it works</a>
+      <a href="authoring.html">Authoring</a>
+      <a href="enterprise.html" aria-current="page">Security &amp; Ops</a>
+      <a href="compare.html">Compare</a>
+      <a href="docs/index.html">Docs</a>
+      <a href="https://github.com/GranusClarvis/SynthMK">GitHub</a>
+      <a class="nav-cta" href="index.html#download">Download</a>
+    </nav>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="wrap">
+    <p class="eyebrow">Security &amp; operations</p>
+    <h1>A synthetic monitor holds your passwords and watches your internal apps</h1>
+    <p class="lead prose">SynthMK is designed around that fact. This page is the full model — what the product enforces, what was actually tested, and what remains your responsibility as the operator. The per-release test evidence behind every claim is public in <a href="https://github.com/GranusClarvis/SynthMK/blob/main/docs/STATUS.md">docs/STATUS.md</a>.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+
+    <!-- SECRETS -->
+    <div class="split" id="secrets">
+      <div class="prose">
+        <span class="tag">Credentials</span>
+        <h3>Secrets are referenced, never embedded</h3>
+        <p>Flow files contain <code>{{ secret.name }}</code> references. The values live in one YAML file on the runner node and nowhere else — not in flows, not in git, not in the Checkmk configuration, not in the recorder.</p>
+        <ul class="checklist">
+          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span><b>Permission-enforced at startup.</b> The runner refuses a secrets file that is group- or world-readable, or owned by the wrong user — it fails UNKNOWN with a clear message instead of running insecurely.</span></li>
+          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18"/><path d="M10.5 5.2A9.8 9.8 0 0 1 21 12a13.2 13.2 0 0 1-2.7 3.2M6.6 6.6A13 13 0 0 0 3 12s3.4 6.5 9 6.5a8.7 8.7 0 0 0 3.4-.7"/></svg><span><b>Hard redaction everywhere.</b> Every value resolved from the secrets file is scrubbed from service summaries, error messages, logs and spool files. A selector error that quotes the page can never quote a credential.</span></li>
+          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><circle cx="12" cy="13" r="4"/><path d="M8.5 7L10 4.5h4L15.5 7"/></svg><span><b>Masked before screenshots.</b> When a sensitive fill ran, form fields are blanked before any failure or evidence screenshot is captured — verified by inspecting the actual PNGs.</span></li>
+          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span><b>TOTP for MFA logins.</b> <code>{{ totp.name }}</code> generates RFC 6238 codes from a base32 seed stored in the same protected file — monitor MFA-enforced accounts without disabling MFA for them.</span></li>
+          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5" fill="currentColor" stroke="none"/></svg><span><b>The recorder never sees a password.</b> Typing into a password field records a reference and a <code>sensitive</code> flag; the typed value never enters the extension's state.</span></li>
+        </ul>
+      </div>
+      <div class="term" aria-label="Secrets example">
+        <pre><span class="c"># secrets.yaml — chmod 600, mounted read-only into the node.
+# This file is the ONLY place values exist.</span>
+portal_user: monitor-bot
+portal_password: "…"
+vpn_totp: "JBSWY3DPEHPK3PXP"   <span class="c"># base32 seed for {{ totp.vpn_totp }}</span>
+
+<span class="c"># What Checkmk sees when a login step fails:</span>
+<span class="t">CRIT - step 4 (fill #password): timeout — value '***' redacted</span>
+
+<span class="c"># What the flow file contains (safe to commit):</span>
+- action: fill
+  selector: "#password"
+  value: "{{ secret.portal_password }}"
+  sensitive: true</pre>
+      </div>
+    </div>
+
+    <!-- TRANSPORT & SURFACE -->
+    <div class="split" id="transport">
+      <div class="prose">
+        <span class="tag">Network surface</span>
+        <h3>Three ports, each authenticated or scoped</h3>
+        <p>The node exposes exactly three services, and the defaults assume a hostile LAN rather than a trusted one:</p>
+        <ul class="checklist">
+          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 4.6-3.4 7.9-8 9-4.6-1.1-8-4.4-8-9V6z"/><path d="M9 12l2 2 4-4.5"/></svg><span><b>:6556 — agent transport.</b> Production mode registers the official Checkmk agent controller in one command: certificate-based TLS, pull-only, paired to your site's CA. Verified live with <code>cmk -d</code> over TLS against Checkmk Raw 2.3. The plaintext fallback exists for labs and is labelled as such.</span></li>
+          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><circle cx="12" cy="13" r="4"/><path d="M8.5 7L10 4.5h4L15.5 7"/></svg><span><b>:9180 — screenshot server.</b> Every screenshot URL carries a per-file HMAC token. No directory listing, no path traversal, 403 without the token, 404 for anything that is not a screenshot — each behavior is an explicit test case.</span></li>
+          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="7" rx="2"/><rect x="4" y="13" width="16" height="7" rx="2"/><path d="M8 7.5h.01M8 16.5h.01"/></svg><span><b>:9181 — management dashboard.</b> Token sign-in with CSRF protection and constant-time comparisons; unauthenticated requests get 401, state-changing requests without the CSRF header get 401. Mount the flows directory read-only and it degrades to a view-only dashboard.</span></li>
+        </ul>
+      </div>
+      <figure class="shot-frame">
+        <img src="assets/node-login.png" alt="SynthMK node dashboard token sign-in screen" width="1500" height="900" loading="lazy" />
+        <figcaption>The dashboard sign-in: an admin token set by the operator, or auto-generated and printed once in the container log.</figcaption>
+      </figure>
+    </div>
+
+    <!-- CONTAINER HARDENING -->
+    <div class="split" id="hardening">
+      <div class="prose">
+        <span class="tag">Runtime</span>
+        <h3>A container that assumes it will be attacked</h3>
+        <p>The shipped production compose file is the hardened configuration, not an example to harden later:</p>
+        <ul class="checklist">
+          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg><span><b>Non-root browsers.</b> Playwright and the HTTP services drop to an unprivileged user; nothing that touches a web page runs as root.</span></li>
+          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg><span><b><code>no-new-privileges</code>, memory and CPU limits, healthcheck</b> — set in the shipped <code>compose.yaml</code>.</span></li>
+          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg><span><b>Pinned Playwright and browsers</b> baked into the image at build time — the node never downloads browser binaries at runtime.</span></li>
+          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg><span><b>Hung runs are killed</b> by a hard per-run timeout; the worker slot is freed and the service reports UNKNOWN rather than wedging the scheduler.</span></li>
+        </ul>
+        <p>One honest caveat: Chromium runs with <code>--no-sandbox</code> inside the container, as is standard for containerized browsers, with privileges dropped instead. Point flows only at sites you trust and keep the image updated — this is listed in the residual-risk table below, not hidden.</p>
+      </div>
+      <div class="prose" id="change-control">
+        <span class="tag">Change control</span>
+        <h3>Every change is gated, versioned and logged</h3>
+        <ul class="checklist">
+          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg><span><b>Lint gate.</b> The dashboard editor and the importer run the flow linter before anything is written — invalid YAML never lands on disk, with the linter's message shown to the author.</span></li>
+          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="7" r="2.5"/><path d="M6 8.5v7M18 9.5c0 4.5-6 3-9.5 6"/></svg><span><b>Version history with rollback.</b> Every flow edit through the dashboard is kept as a revision; restoring the previous known-good version is one click.</span></li>
+          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 13h5M10 17h5"/></svg><span><b>Audit log.</b> Who changed which flow, paused which check, triggered which run — recorded on the node and visible in the dashboard.</span></li>
+          <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5v14M15 5v14"/></svg><span><b>Pause/resume and tags.</b> Maintenance window? Pause the check instead of deleting it. Tags group checks by team or application for filtering.</span></li>
+          <li id="script-trust"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span><b>Script checks are operator-gated.</b> Playwright Python checks only run from a directory the operator explicitly enables on the node. The dashboard cannot enable it; an author cannot smuggle code in through a flow. Disabled means disabled.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SCALE EVIDENCE -->
+    <div class="section-head" id="scale" style="margin-top: var(--s8);">
+      <p class="eyebrow">Capacity</p>
+      <h2>Scale claims you can reproduce</h2>
+      <p class="lead prose">Numbers from <code>scripts/scale_test.sh</code> in the repo — a 5-minute soak of 60 flows on a single container limited to 4 CPUs / 6 GB, every fifth flow a full multi-step login journey with secrets. Method and capacity formula: <a href="https://github.com/GranusClarvis/SynthMK/blob/main/docs/scaling.md">docs/scaling.md</a>.</p>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="v">60 / 60</div><div class="k">flows fresh and OK after the soak — zero stale, zero overdue, zero overlap skips</div></div>
+      <div class="stat"><div class="v">≈37</div><div class="k">browser runs per minute sustained — matching the published capacity formula's 36.7</div></div>
+      <div class="stat"><div class="v">&lt; 0.5 s</div><div class="k">full agent poll, 128 lines over TCP — spool decoupling keeps polls instant under load</div></div>
+      <div class="stat"><div class="v">12–25 %</div><div class="k">CPU of the 4-core budget at steady state; pool peaked at 3 of 4 slots</div></div>
+    </div>
+    <div class="callout" style="margin-top: var(--s5);">
+      <b>The overload contract:</b> if you oversubscribe a node, the <b>SynthMK Scheduler</b> service goes WARN <em>on the node</em>, naming the overdue flows. Monitored applications never show false CRITs because the probe is saturated — the probe blames itself, by design.
+    </div>
+
+    <!-- RESIDUAL RISK -->
+    <div class="section-head" id="residual" style="margin-top: var(--s8);">
+      <p class="eyebrow">Honesty section</p>
+      <h2>What you still own as the operator</h2>
+      <p class="lead">No vendor table ever lists these. SynthMK's are public, in the repo, with severity ratings. The short version:</p>
+    </div>
+    <div class="table-scroll">
+      <table class="cmp">
+        <thead><tr><th scope="col">Severity</th><th scope="col">Residual item</th><th scope="col">Your move</th></tr></thead>
+        <tbody>
+          <tr><td>Medium</td><td>Chromium runs <code>--no-sandbox</code> in the container (standard for Docker; privileges dropped to an unprivileged user instead).</td><td>Point flows only at trusted internal sites; rebuild the image on a schedule to pick up browser updates.</td></tr>
+          <tr><td>Medium</td><td>Clickable screenshot links need Checkmk's “Escape HTML codes in service output” set to Off — a known XSS surface if applied broadly (Checkmk Werk #6058).</td><td>Scope that rule to the runner host(s) only. SynthMK emits a single sanitized line, but keep the rule narrow anyway.</td></tr>
+          <tr><td>Low</td><td>The lab/default agent transport (socat, port 6556) is plaintext.</td><td>Use it only firewalled-to-the-Checkmk-server or in labs; switch production to the official TLS agent mode.</td></tr>
+          <tr><td>Low</td><td>The bundled lab ships hardcoded demo credentials for its demo site.</td><td>Never reuse lab credentials outside the lab. They exist so the end-to-end test is reproducible.</td></tr>
+          <tr><td>Low</td><td>Supply chain: the base image is pinned by version, not digest.</td><td>Review MKP contents before distributing internally; pin by digest in your own build if policy requires it.</td></tr>
+          <tr><td>—</td><td>Script checks, if you enable them, run with the node's privileges by definition.</td><td>Treat the scripts directory like production code: review before deploy, restrict who can write to it.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="prose" style="margin-top: var(--s4);">Full security review with status per item: <a href="https://github.com/GranusClarvis/SynthMK/blob/main/docs/STATUS.md">docs/STATUS.md §5</a>. What is tested per release — and explicitly what is <em>not</em> yet tested — lives in the same file.</p>
+
+    <div class="cta-row" style="margin-top: var(--s7);">
+      <a class="btn btn-primary" href="index.html#quickstart">Install SynthMK</a>
+      <a class="btn" href="https://github.com/GranusClarvis/SynthMK/blob/main/docs/STATUS.md">Read the test evidence</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-about">
+        <a class="brand" href="index.html"><img src="assets/logo.png" alt="" width="128" height="128" /><span>Synth<b>MK</b></span></a>
+        <p>Open-source synthetic browser monitoring for Checkmk. Self-hosted, MIT-licensed, verified against Checkmk Raw 2.3.</p>
+      </div>
+      <div>
+        <h4>Product</h4>
+        <a href="authoring.html">Authoring</a>
+        <a href="enterprise.html">Security &amp; operations</a>
+        <a href="compare.html">Comparisons</a>
+        <a href="docs/index.html">Documentation</a>
+      </div>
+      <div>
+        <h4>Project</h4>
+        <a href="https://github.com/GranusClarvis/SynthMK">GitHub</a>
+        <a href="https://github.com/GranusClarvis/SynthMK/releases">Releases</a>
+        <a href="https://github.com/GranusClarvis/SynthMK/blob/main/CHANGELOG.md">Changelog</a>
+        <a href="https://github.com/GranusClarvis/SynthMK/blob/main/docs/STATUS.md">Test evidence</a>
+        <a href="https://github.com/GranusClarvis/SynthMK/issues">Issues</a>
+      </div>
+      <div>
+        <h4>Download</h4>
+        <a href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk.mkp">Checkmk plugin (.mkp)</a>
+        <a href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk-recorder-chrome.zip">Recorder — Chrome/Edge</a>
+        <a href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk-recorder-firefox.zip">Recorder — Firefox</a>
+      </div>
+    </div>
+    <div class="foot-base">
+      <span>MIT licensed. © SynthMK contributors.</span>
+      <span>Not affiliated with Checkmk GmbH. Checkmk is a trademark of Checkmk GmbH.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/site.js"></script>
+</body>
+</html>
