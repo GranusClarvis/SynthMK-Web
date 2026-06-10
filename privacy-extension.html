@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Recorder extension privacy policy · SynthMK</title>
+  <meta name="description" content="Privacy policy for the SynthMK Recorder browser extension: no telemetry, no analytics, no network requests. Recordings stay on your machine and passwords are never recorded." />
+  <link rel="icon" href="assets/favicon.png" />
+  <link rel="stylesheet" href="css/site.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap nav-inner">
+    <a class="brand" href="index.html"><img src="assets/logo.png" alt="" width="128" height="128" /><span>Synth<b>MK</b></span></a>
+    <button class="nav-toggle" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav-links" aria-label="Main">
+      <a href="index.html#how">How it works</a>
+      <a href="authoring.html">Authoring</a>
+      <a href="enterprise.html">Security &amp; Ops</a>
+      <a href="compare.html">Compare</a>
+      <a href="docs/index.html">Docs</a>
+      <a href="https://github.com/GranusClarvis/SynthMK">GitHub</a>
+      <a class="nav-cta" href="index.html#download">Download</a>
+    </nav>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="wrap">
+    <p class="eyebrow">Recorder extension</p>
+    <h1>Privacy policy</h1>
+    <p class="lead">The short version: the SynthMK Recorder extension collects nothing. No telemetry, no analytics, no accounts, no network requests. Everything it records stays on your machine until you export it yourself as a local file.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <main class="doc-body prose" style="max-width: var(--maxw-narrow); margin: 0 auto;">
+
+      <p>Last updated: June 10, 2026. This policy applies to the SynthMK Recorder browser extension for Chrome, Edge and Firefox.</p>
+
+      <h2>What the extension does</h2>
+      <p>While you are recording, and only then, the extension captures your interactions with the page you chose: clicks, text you type into non-password fields, dropdown selections, Enter presses, and the URLs the recorded tab navigates to. These steps are stored in the extension's local storage in your browser so a recording survives page navigations. When you export, the steps become a YAML text file saved through your browser's normal download mechanism, or copied to your clipboard if you press Copy.</p>
+
+      <h2>What never happens</h2>
+      <ul>
+        <li><b>No data leaves your browser.</b> The extension contains no network code at all: no fetch, no XMLHttpRequest, no WebSocket, no analytics SDK, no error reporting. There is nothing it could send and nowhere it would send it.</li>
+        <li><b>No remote code is loaded.</b> Every script ships inside the extension package and is reviewable in the <a href="https://github.com/GranusClarvis/SynthMK">open-source repository</a>.</li>
+        <li><b>Passwords are never recorded.</b> Typing into a password field stores a placeholder reference of the form <code>{{ secret.&lt;field-name&gt; }}</code> instead of the value, and marks the step as sensitive. The actual password exists only on the page you typed it into. It never enters the recording, the export, or extension storage.</li>
+        <li><b>Nothing is captured while you are not recording.</b> The content script registers no page event listeners until you press Start, and removes them when you press Stop.</li>
+        <li><b>Nothing is sold, shared or transferred</b> to the developer or to any third party, because nothing is collected in the first place.</li>
+      </ul>
+
+      <h2>Data storage and deletion</h2>
+      <p>Recordings and popup settings (service name, thresholds, screenshot toggle) live in the browser's local extension storage on your device. Press <b>Clear</b> in the popup to delete the current recording, or uninstall the extension to remove everything it ever stored.</p>
+
+      <h2>Permissions, in plain language</h2>
+      <ul>
+        <li><b>Access to sites:</b> needed so the recorder can capture clicks and fills on whichever site you choose to record. It stays passive until you press Start.</li>
+        <li><b>Tabs:</b> needed to follow the recorded tab across page navigations and record them as steps.</li>
+        <li><b>Storage:</b> needed to keep the in-progress recording on your machine.</li>
+        <li><b>Downloads:</b> needed to save the exported YAML file locally.</li>
+      </ul>
+
+      <h2>Contact</h2>
+      <p>Questions or concerns: open an issue at <a href="https://github.com/GranusClarvis/SynthMK/issues">github.com/GranusClarvis/SynthMK/issues</a>.</p>
+
+    </main>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-about">
+        <a class="brand" href="index.html"><img src="assets/logo.png" alt="" width="128" height="128" /><span>Synth<b>MK</b></span></a>
+        <p>Open-source synthetic browser monitoring for Checkmk. Self-hosted, MIT-licensed, verified against Checkmk Raw 2.3.</p>
+      </div>
+      <div>
+        <h4>Product</h4>
+        <a href="authoring.html">Authoring</a>
+        <a href="enterprise.html">Security &amp; operations</a>
+        <a href="compare.html">Comparisons</a>
+        <a href="docs/index.html">Documentation</a>
+        <a href="privacy-extension.html">Extension privacy</a>
+      </div>
+      <div>
+        <h4>Project</h4>
+        <a href="https://github.com/GranusClarvis/SynthMK">GitHub</a>
+        <a href="https://github.com/GranusClarvis/SynthMK/releases">Releases</a>
+        <a href="https://github.com/GranusClarvis/SynthMK/blob/main/CHANGELOG.md">Changelog</a>
+        <a href="https://github.com/GranusClarvis/SynthMK/blob/main/docs/STATUS.md">Test evidence</a>
+        <a href="https://github.com/GranusClarvis/SynthMK/issues">Issues</a>
+      </div>
+      <div>
+        <h4>Download</h4>
+        <a href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk.mkp">Checkmk plugin (.mkp)</a>
+        <a href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk-recorder-chrome.zip">Recorder (Chrome/Edge)</a>
+        <a href="https://github.com/GranusClarvis/SynthMK/releases/latest/download/synthmk-recorder-firefox.zip">Recorder (Firefox)</a>
+      </div>
+    </div>
+    <div class="foot-base">
+      <span>MIT licensed. © SynthMK contributors.</span>
+      <span>Not affiliated with Checkmk GmbH. Checkmk is a trademark of Checkmk GmbH.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/site.js"></script>
+</body>
+</html>
