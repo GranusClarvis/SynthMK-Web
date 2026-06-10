@@ -129,7 +129,7 @@ vpn_totp: "JBSWY3DPEHPK3PXP"   <span class="c"># base32 seed for {{ totp.vpn_tot
       <div class="stat"><div class="v">12–25 %</div><div class="k">CPU of the 4-core budget at steady state; pool peaked at 3 of 4 slots</div></div>
     </div>
     <div class="callout" style="margin-top: var(--s5);">
-      <b>The overload contract:</b> if you oversubscribe a node, the <b>SynthMK Scheduler</b> service goes WARN <em>on the node</em>, naming the overdue flows. Monitored applications never show false CRITs because the probe is saturated — the probe blames itself, by design.
+      <b>The overload contract:</b> if you oversubscribe a node, the <b>SynthMK Scheduler</b> service goes WARN <em>on the node</em> — either naming the overdue flows, or via the throughput watchdog (achieved vs demanded runs/min over a 5-minute window), which catches the sneakier mode where a saturated pool round-robins fairly and no single flow looks late. Monitored applications never show false CRITs because the probe is saturated — the probe blames itself, by design. Stress-tested at 150 flows plus a deliberate-overload phase (<code>runner-node/stress_test.py</code>).
     </div>
 
     <!-- RESIDUAL RISK -->
